@@ -18,7 +18,7 @@ func Strcasecmp(s1 string, s2 string) int {
 		len_ = s2_len
 	}
 	for i := 0; i < len_; i++ {
-		if !cmp_(s1[i], s2[i]) {
+		if !cmpLower(s1[i], s2[i]) {
 			return int(lower(s1[i])) - int(lower(s2[i]))
 		}
 	}
