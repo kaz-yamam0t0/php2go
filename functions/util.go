@@ -26,6 +26,27 @@ func urlShouldEscape(c byte) bool {
 	return true
 }
 
+/*
+used in Stripcslashes
+*/
+func is_digit(c byte) bool {
+	return '0' <= c && c <= '9'
+}
+func is_hex(c byte) bool {
+	return ('0' <= c && c <= '9') || ('a' <= c && c <= 'f') || ('A' <= c && c <= 'F')
+}
+func c_hex(c byte) byte {
+	if '0' <= c && c <= '9' {
+		return c - '0'
+	}
+	if 'a' <= c && c <= 'f' {
+		return c - 'a' + 0x0A
+	}
+	if 'A' <= c && c <= 'F' {
+		return c - 'A' + 0x0A
+	}
+	return 0
+}
 
 /**
  * ENT_COMPAT     : Will convert double-quotes and leave single-quotes alone.
@@ -51,5 +72,17 @@ func urlShouldEscape(c byte) bool {
 	ENT_XHTML      = 32
 	ENT_HTML5      = 48
 )
+/**
+ * STR_PAD_RIGHT : undefined
+ * STR_PAD_LEFT  : undefined
+ * STR_PAD_BOTH  : undefined
+ */
+const (
+	STR_PAD_RIGHT = 1
+	STR_PAD_LEFT  = 0
+	STR_PAD_BOTH  = 2
+)
+
+
 
 const upperhex = "0123456789ABCDEF"

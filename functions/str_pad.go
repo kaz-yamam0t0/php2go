@@ -12,17 +12,6 @@
  */
 package functions
 
-/**
- * STR_PAD_RIGHT : undefined
- * STR_PAD_LEFT  : undefined
- * STR_PAD_BOTH  : undefined
- */
-const (
-	STR_PAD_RIGHT = 1
-	STR_PAD_LEFT  = 0
-	STR_PAD_BOTH  = 2
-)
-
 func StrPad(s string, length int, args ...interface{}) string {
 	var pad_string string
 	pad_type := STR_PAD_RIGHT

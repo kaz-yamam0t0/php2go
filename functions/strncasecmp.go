@@ -11,17 +11,6 @@
  */
 package functions
 
-func lower_(c byte) byte {
-	if 'A' <= c && c <= 'Z' {
-		return c + 'a' - 'A'
-	}
-	return c
-}
-func cmp_(a byte, b byte) bool {
-	a = lower_(a)
-	b = lower_(b)
-	return (a - b) == 0
-}
 func Strncasecmp(s1 string, s2 string, length int) int {
 	s1_len := len(s1)
 	s2_len := len(s2)
@@ -34,8 +23,8 @@ func Strncasecmp(s1 string, s2 string, length int) int {
 	}
 
 	for i := 0; i < len_; i++ {
-		if !cmp_(s1[i], s2[i]) {
-			return int(lower_(s1[i])) - int(lower_(s2[i]))
+		if !cmpLower(s1[i], s2[i]) {
+			return int(lower(s1[i])) - int(lower(s2[i]))
 		}
 	}
 	if len_ == length {
