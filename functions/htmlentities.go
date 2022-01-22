@@ -1,15 +1,3 @@
-/**
- * Golang equivalent to php `htmlentities`
- *
- * Convert all applicable characters to HTML entities
- * @see https://www.php.net/manual/en/function.htmlentities.php
- *
- * @param string s
- * @param int flags
- * @param string encoding
- * @param bool double_encode
- * @return string
- */
 package functions
 
 import (
@@ -17,7 +5,11 @@ import (
 	"strings"
 )
 
-//func Htmlspecialchars(s string, flags ...int, encoding ...string, double_encode ...bool) string {
+// Convert all applicable characters to HTML entities
+// 
+// Actually the sypnosis of Htmlentities() is like this:
+// 
+//  Htmlentities(s string[, flags int[, encoding string[, double_encode bool]]]) 
 func Htmlentities(s string, args ...interface{}) string {
 	var flags int = ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401
 	var encoding string

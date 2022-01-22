@@ -1,17 +1,12 @@
-/**
- * Golang equivalent to php `strrchr`
- *
- * Find the last occurrence of a character in a string
- * @see https://www.php.net/manual/en/function.strrchr.php
- *
- * @param string haystack
- * @param string needle
- * @return string
- */
 package functions
 
 import "errors"
 
+// Find the last occurrence of a character in a string
+// 
+// Actually the sypnosis of Strrchr() is like this:
+// 
+//  Strrchr(haystack string, needle byte|string) 
 func Strrchr(haystack string, args interface{}) (string, error) {
 	var needle byte
 	switch a := args.(type) {

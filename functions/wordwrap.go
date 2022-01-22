@@ -1,15 +1,3 @@
-/**
- * Golang equivalent to php `wordwrap`
- *
- * Wraps a string to a given number of characters
- * @see https://www.php.net/manual/en/function.wordwrap.php
- *
- * @param string s
- * @param int width
- * @param string break
- * @param bool cut_long_words
- * @return string
- */
 package functions
 
 import (
@@ -24,6 +12,11 @@ func isSpace(c byte) bool {
 	return false
 }
 
+// Wraps a string to a given number of characters
+// 
+// Actually the sypnosis of Wordwrap() is like this:
+// 
+//  Wordwrap(s string[, width int = 75[, break string = "\n", [ cut_long_words bool = false ]]]) 
 func Wordwrap(s string, args ...interface{}) (string, error) {
 	var width int = 75
 	var break_s string = "\n"

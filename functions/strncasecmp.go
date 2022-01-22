@@ -1,16 +1,6 @@
-/**
- * Golang equivalent to php `strncasecmp`
- *
- * Binary safe case-insensitive string comparison of the first n characters
- * @see https://www.php.net/manual/en/function.strncasecmp.php
- *
- * @param string string1
- * @param string string2
- * @param int length
- * @return int
- */
 package functions
 
+// Binary safe case-insensitive string comparison of the first n characters
 func Strncasecmp(s1 string, s2 string, length int) int {
 	s1_len := len(s1)
 	s2_len := len(s2)

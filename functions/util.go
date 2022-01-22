@@ -1,5 +1,7 @@
 package functions
 
+// utils
+
 func lower(c byte) byte {
 	if 'A' <= c && c <= 'Z' {
 		return c + 'a' - 'A'
@@ -26,9 +28,7 @@ func urlShouldEscape(c byte) bool {
 	return true
 }
 
-/*
-used in Stripcslashes
-*/
+// used in Stripcslashes
 func is_digit(c byte) bool {
 	return '0' <= c && c <= '9'
 }
@@ -47,36 +47,21 @@ func c_hex(c byte) byte {
 	}
 	return 0
 }
-
-/**
- * ENT_COMPAT     : Will convert double-quotes and leave single-quotes alone.
- * ENT_QUOTES     : Will convert both double and single quotes.
- * ENT_NOQUOTES   : Will leave both double and single quotes unconverted.
- * ENT_IGNORE     : Silently discard invalid code unit sequences instead of returning an empty string. Using this flag is discouraged as it may have security implications.
- * ENT_DISALLOWED : Replace invalid code points for the given document type with a Unicode Replacement Character U+FFFD (UTF-8) or &#xFFFD; (otherwise) instead of leaving them as is. This may be useful, for instance, to ensure the well-formedness of XML documents with embedded external content.
- * ENT_SUBSTITUTE : Replace invalid code unit sequences with a Unicode Replacement Character U+FFFD (UTF-8) or &#xFFFD; (otherwise) instead of returning an empty string.
- * ENT_HTML401    : Handle code as HTML 4.01.
- * ENT_XML1       : Handle code as XML 1.
- * ENT_XHTML      : Handle code as XHTML.
- * ENT_HTML5      : Handle code as HTML 5.
- */
- const (
-	ENT_COMPAT     = 2
-	ENT_QUOTES     = 3
-	ENT_NOQUOTES   = 0
-	ENT_IGNORE     = 4
-	ENT_DISALLOWED = 128
-	ENT_SUBSTITUTE = 8
-	ENT_HTML401    = 0
-	ENT_XML1       = 16
-	ENT_XHTML      = 32
-	ENT_HTML5      = 48
+// Constants for escaping or unescaping html strings.
+const (
+	ENT_COMPAT     = 2    // Will convert double-quotes and leave single-quotes alone.
+	ENT_QUOTES     = 3    // Will convert both double and single quotes.
+	ENT_NOQUOTES   = 0    // Will leave both double and single quotes unconverted.
+	ENT_IGNORE     = 4    // Silently discard invalid code unit sequences instead of returning an empty string. Using this flag is discouraged as it may have security implications.
+	ENT_DISALLOWED = 128  // Replace invalid code points for the given document type with a Unicode Replacement Character U+FFFD (UTF-8) or &#xFFFD; (otherwise) instead of leaving them as is. This may be useful, for instance, to ensure the well-formedness of XML documents with embedded external content.
+	ENT_SUBSTITUTE = 8    // Replace invalid code unit sequences with a Unicode Replacement Character U+FFFD (UTF-8) or &#xFFFD; (otherwise) instead of returning an empty string.
+	ENT_HTML401    = 0    // Handle code as HTML 4.01.
+	ENT_XML1       = 16   // Handle code as XML 1.
+	ENT_XHTML      = 32   // Handle code as XHTML.
+	ENT_HTML5      = 48   // Handle code as HTML 5.
 )
-/**
- * STR_PAD_RIGHT : undefined
- * STR_PAD_LEFT  : undefined
- * STR_PAD_BOTH  : undefined
- */
+
+// Constants for padding string chars. (used in `StrPad()`)
 const (
 	STR_PAD_RIGHT = 1
 	STR_PAD_LEFT  = 0

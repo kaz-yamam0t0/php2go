@@ -1,18 +1,12 @@
-/**
- * Golang equivalent to php `strstr`
- *
- * Find the first occurrence of a string
- * @see https://www.php.net/manual/en/function.strstr.php
- *
- * @param string haystack
- * @param string needle
- * @param bool before_needle
- * @return string, error
- */
 package functions
 
 import "errors"
 
+// Find the first occurrence of a string
+// 
+// Actually the sypnosis of Strstr() is like this:
+// 
+//  Strstr(haystack string, needle string[, before_needle bool = false]) 
 func Strstr(s string, needle string, args ...bool) (string, error) {
 	before_needle := false
 	if len(args) > 0 {

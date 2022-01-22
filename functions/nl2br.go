@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `nl2br`
- *
- * Inserts HTML line breaks before all newlines in a string
- * @see https://www.php.net/manual/en/function.nl2br.php
- *
- * @param string s
- * @param bool use_xhtml
- * @return string
- */
 package functions
 
+// Inserts HTML line breaks before all newlines in a string
 func Nl2br(s string, args ...bool) string {
 	use_xhtml := true
 	if len(args) > 0 {

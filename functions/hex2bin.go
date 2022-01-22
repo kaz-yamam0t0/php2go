@@ -1,12 +1,3 @@
-/**
- * Golang equivalent to php `hex2bin`
- *
- * Decodes a hexadecimally encoded binary string
- * @see https://www.php.net/manual/en/function.hex2bin.php
- *
- * @param string s
- * @return (string, error)
- */
 package functions
 
 import "errors"
@@ -24,6 +15,7 @@ func hex_(c byte) int {
 	}
 }
 
+// Decodes a hexadecimally encoded binary string
 func Hex2bin(s string) (string, error) {
 	s_len := len(s)
 	dst := make([]byte, int(s_len/2)+1)

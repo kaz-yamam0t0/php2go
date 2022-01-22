@@ -1,14 +1,3 @@
-/**
- * Golang equivalent to php `array_keys`
- *
- * Return all the keys or a subset of the keys of an array
- * @see https://www.php.net/manual/en/function.array-keys.php
- *
- * @param interface{} array
- * @param interface{} search_value
- * @param bool strict
- * @return []interface{}
- */
 package functions
 
 import (
@@ -16,7 +5,7 @@ import (
 	//"bytes"
 	"reflect"
 )
-
+// phpEqual
 func phpEqual(a interface{}, b interface{}, strict_flg bool) bool {
 	if strict_flg == false {
 
@@ -24,6 +13,11 @@ func phpEqual(a interface{}, b interface{}, strict_flg bool) bool {
 	return reflect.DeepEqual(a, b)
 }
 
+// Return all the keys or a subset of the keys of an array.
+// 
+// Actually ArrayKeys is called like this:
+// 
+//  ArrayKeys(array interface{} , search_value interface{} [, string_flg bool]) []interface{}
 func ArrayKeys(args ...interface{}) ([]interface{}, error) {
 	//var values []interface{}
 	var keys []interface{}

@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_graph`
- *
- * Check for any printable character(s) except space
- * @see https://www.php.net/manual/en/function.ctype-graph.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for any printable character(s) except space
 func CtypeGraph(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

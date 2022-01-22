@@ -1,19 +1,12 @@
-/**
- * Golang equivalent to php `number_format`
- *
- * Format a number with grouped thousands
- * @see https://www.php.net/manual/en/function.number-format.php
- *
- * @param float num
- * @param int decimals
- * @param string decimal_separator
- * @param string thousands_separator
- * @return string
- */
 package functions
 
 import "strconv"
 
+// Format a number with grouped thousands
+// 
+// Actually the sypnosis of NumberFormat() is like this:
+// 
+//  NumberFormat(s float64[, decimals int[, decimal_separator string[, thousands_separator string]]]) 
 func NumberFormat(num float64, args ...interface{}) string {
 	var decimals int
 	var decimal_separator string

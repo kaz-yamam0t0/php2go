@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_alpha`
- *
- * Check for alphabetic character(s)
- * @see https://www.php.net/manual/en/function.ctype-alpha.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for alphabetic character(s)
 func CtypeAlpha(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

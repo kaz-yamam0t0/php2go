@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `strcmp`
- *
- * Binary safe string comparison
- * @see https://www.php.net/manual/en/function.strcmp.php
- *
- * @param string string1
- * @param string string2
- * @return int
- */
 package functions
 
+// Binary safe string comparison
 func Strcmp(s1 string, s2 string) int {
 	s1_len := len(s1)
 	s2_len := len(s2)

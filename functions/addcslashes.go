@@ -1,15 +1,6 @@
-/**
- * php `addcslashes` with Golang
- *
- * Quote string with slashes in a C style
- * @see https://www.php.net/manual/en/function.addcslashes.php
- *
- * @param string s
- * @param string characters
- * @return string
- */
 package functions
 
+//  Quote string with slashes in a C style
 func Addcslashes(s string, chars string) string {
 	var flags [256]byte
 

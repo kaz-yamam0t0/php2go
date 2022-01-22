@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_digit`
- *
- * Check for numeric character(s)
- * @see https://www.php.net/manual/en/function.ctype-digit.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for numeric character(s)
 func CtypeDigit(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

@@ -1,18 +1,12 @@
-/**
- * Golang equivalent to php `trim`
- *
- * Strip whitespace (or other characters) from the beginning and end of a string
- * @see https://www.php.net/manual/en/function.trim.php
- *
- * [Note]
- * you can also use `strings.TrimSpace()`
- *
- * @param string s
- * @param string characters
- * @return string
- */
 package functions
 
+// Strip whitespace (or other characters) from the beginning and end of a string
+// 
+// Actually the sypnosis of Trim() is like this:
+// 
+//  Trim(s string[, chars string = " \n\r\t\v\x00"]) 
+// 
+// [Note] If you just want to remove whitespaces, you can also use `strings.TrimSpace()`
 func Trim(s string, args ...string) string {
 	var flags [256]byte
 

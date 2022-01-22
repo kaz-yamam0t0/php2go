@@ -1,17 +1,6 @@
-/**
- * Golang equivalent to php `str_pad`
- *
- * Pad a string to a certain length with another string
- * @see https://www.php.net/manual/en/function.str-pad.php
- *
- * @param string s
- * @param int length
- * @param string pad_string
- * @param int pad_type
- * @return string
- */
 package functions
 
+// Pad a string to a certain length with another string
 func StrPad(s string, length int, args ...interface{}) string {
 	var pad_string string
 	pad_type := STR_PAD_RIGHT

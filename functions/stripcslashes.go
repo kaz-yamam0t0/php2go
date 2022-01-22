@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `stripcslashes`
- *
- * Un-quote string quoted with addcslashes
- * @see https://www.php.net/manual/en/function.stripcslashes.php
- *
- * @param string s
- * @return string
- */
 package functions
 
+// Un-quote string quoted with addcslashes
 func Stripcslashes(s string) string {
 	s_len := len(s)
 	dst := make([]byte, s_len)

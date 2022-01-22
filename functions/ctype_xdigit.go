@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_xdigit`
- *
- * Check for character(s) representing a hexadecimal digit
- * @see https://www.php.net/manual/en/function.ctype-xdigit.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for character(s) representing a hexadecimal digit
 func CtypeXdigit(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

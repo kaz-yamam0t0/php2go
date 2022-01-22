@@ -1,18 +1,3 @@
-/**
- * Golang equivalent to php `htmlspecialchars`
- *
- * Convert special characters to HTML entities
- * @see https://www.php.net/manual/en/function.htmlspecialchars.php
- *
- * [Note]
- * This is a golang alternative of php `htmlspecialchars`, but I recommend `html.EscapeString()`.
- *
- * @param string s
- * @param int flags
- * @param string encoding
- * @param bool double_encode
- * @return string
- */
 package functions
 
 import (
@@ -21,7 +6,13 @@ import (
 	"strings"
 )
 
-//func Htmlspecialchars(s string, flags ...int, encoding ...string, double_encode ...bool) string {
+// Convert special characters to HTML entities
+// 
+// Actually the sypnosis of Htmlspecialchars() is like this:
+// 
+//  Htmlspecialchars(s string[, flags int[, encoding string[, double_encode bool]]]) 
+// 
+// [Note] You can also use `html.EscapeString()`
 func Htmlspecialchars(s string, args ...interface{}) string {
 	var flags int = ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401
 	var encoding string

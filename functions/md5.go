@@ -1,13 +1,3 @@
-/**
- * Golang equivalent to php `md5`
- *
- * Calculate the md5 hash of a string
- * @see https://www.php.net/manual/en/function.md5.php
- *
- * @param string s
- * @param bool binary
- * @return string
- */
 package functions
 
 import (
@@ -15,6 +5,7 @@ import (
 	"encoding/hex"
 )
 
+// Calculate the md5 hash of a string
 func Md5(s string, args ...bool) string {
 	binary_flg := false
 	if len(args) > 0 {

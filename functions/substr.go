@@ -1,16 +1,6 @@
-/**
- * php `substr` with Golang
- *
- * Return part of a string
- * @see https://www.php.net/manual/en/function.substr.php
- *
- * @param string s
- * @param int offset
- * @param int length
- * @return string
- */
 package functions
 
+// Return part of a string
 func Substr(s string, offset int, args ...int) string {
 	var length int = 0
 	if len(args) > 0 {

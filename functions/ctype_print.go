@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_print`
- *
- * Check for printable character(s)
- * @see https://www.php.net/manual/en/function.ctype-print.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for printable character(s)
 func CtypePrint(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

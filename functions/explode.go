@@ -1,18 +1,13 @@
-/**
- * Golang equivalent to php `explode`
- *
- * Split a string by a string
- * @see https://www.php.net/manual/en/function.explode.php
- *
- * @param string separator
- * @param string s
- * @param int limit
- * @return interface{}
- */
 package functions
 
 import "strings"
 
+
+// Split a string by a string
+// 
+// Actually the sypnosis of Explode is like this:
+// 
+//  Explode(separator string, s string[, int limit=-1]) []string
 func Explode(separator string, s string, args ...int) []string {
 	limit := 9223372036854775807
 	if len(args) > 0 {

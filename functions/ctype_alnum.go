@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_alnum`
- *
- * Check for alphanumeric character(s)
- * @see https://www.php.net/manual/en/function.ctype-alnum.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for alphanumeric character(s)
 func CtypeAlnum(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

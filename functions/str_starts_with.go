@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `str_starts_with`
- *
- * Checks if a string starts with a given substring
- * @see https://www.php.net/manual/en/function.str-starts-with.php
- *
- * @param string haystack
- * @param string needle
- * @return bool
- */
 package functions
 
+// Checks if a string starts with a given substring
 func StrStartsWith(s string, needle string) bool {
 	s_len := len(s)
 	n_len := len(needle)

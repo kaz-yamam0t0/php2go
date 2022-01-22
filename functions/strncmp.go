@@ -1,16 +1,6 @@
-/**
- * Golang equivalent to php `strncmp`
- *
- * Binary safe string comparison of the first n characters
- * @see https://www.php.net/manual/en/function.strncmp.php
- *
- * @param string string1
- * @param string string2
- * @param int length
- * @return int
- */
 package functions
 
+// Binary safe string comparison of the first n characters
 func Strncmp(s1 string, s2 string, length int) int {
 	s1_len := len(s1)
 	s2_len := len(s2)

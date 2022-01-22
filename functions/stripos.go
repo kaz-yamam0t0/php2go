@@ -1,16 +1,10 @@
-/**
- * Golang equivalent to php `stripos`
- *
- * Find the position of the first occurrence of a case-insensitive substring in a string
- * @see https://www.php.net/manual/en/function.stripos.php
- *
- * @param string haystack
- * @param string needle
- * @param int offset
- * @return interface{}
- */
 package functions
 
+// Find the position of the first occurrence of a case-insensitive substring in a string
+// 
+// Actually the sypnosis of Stripos() is like this:
+// 
+//  Stripos(s string, needle string[, offset int = 0]) 
 func Stripos(s string, needle string, args ...int) int {
 	offset := 0
 	if len(args) > 0 {

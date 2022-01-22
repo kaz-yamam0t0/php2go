@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `bin2hex`
- *
- * Convert binary data into hexadecimal representation
- * @see https://www.php.net/manual/en/function.bin2hex.php
- *
- * @param string s
- * @return string
- */
 package functions
 
+// Convert binary data into hexadecimal representation
 func Bin2hex(s string) string {
 	s_len := len(s)
 

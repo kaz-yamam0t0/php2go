@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `strtoupper`
- *
- * Make a string uppercase
- * @see https://www.php.net/manual/en/function.strtoupper.php
- *
- * @param string s
- * @return string
- */
 package functions
 
+// Make a string uppercase
 func Strtoupper(s string) string {
 	len_ := len(s)
 	dst := make([]byte, len_)

@@ -1,16 +1,6 @@
-/**
- * Golang equivalent to php `strpos`
- *
- * Find the position of the first occurrence of a substring in a string
- * @see https://www.php.net/manual/en/function.strpos.php
- *
- * @param string haystack
- * @param string needle
- * @param int offset
- * @return interface{}
- */
 package functions
 
+// Find the position of the first occurrence of a substring in a string
 func Strpos(s string, needle string, args ...int) int {
 	offset := 0
 	if len(args) > 0 {

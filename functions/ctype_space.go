@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_space`
- *
- * Check for whitespace character(s)
- * @see https://www.php.net/manual/en/function.ctype-space.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for whitespace character(s)
 func CtypeSpace(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

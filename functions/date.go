@@ -1,13 +1,3 @@
-/**
- * Golang equivalent to php `date`
- *
- * Format a local time/date (Some formats are not supported)
- * @see https://www.php.net/manual/en/function.date.php
- *
- * @param string format
- * @param int|time.Time timestamp
- * @return string
- */
 package functions
 
 import (
@@ -211,6 +201,7 @@ func dateFormat(f byte, d time.Time) (string, bool) {
 	return "", false
 }
 
+// Format a local time/date (Some formats are not supported)
 func Date(s string, args ...interface{}) string {
 	var dt time.Time
 

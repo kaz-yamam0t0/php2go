@@ -1,13 +1,3 @@
-/**
- * Golang equivalent to php `strtotime`
- *
- * Parse about any English textual datetime description into a Unix timestamp
- * @see https://www.php.net/manual/en/function.strtotime.php
- *
- * @param string datetime
- * @param int baseTimestamp
- * @return interface{}
- */
 package functions
 
 import (
@@ -555,6 +545,7 @@ func Str2Time(format string, base *time.Time) *time.Time {
 	return res
 }
 
+// Parse about any English textual datetime description into a Unix timestamp
 func Strtotime(format string, args ...interface{}) int64 {
 	// parse base
 	var base time.Time

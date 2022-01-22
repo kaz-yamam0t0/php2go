@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `ltrim`
- *
- * Strip whitespace (or other characters) from the beginning of a string
- * @see https://www.php.net/manual/en/function.ltrim.php
- *
- * @param string s
- * @param string characters
- * @return string
- */
 package functions
 
+// Strip whitespace (or other characters) from the beginning of a string
 func Ltrim(s string, args ...string) string {
 	var flags [256]byte
 

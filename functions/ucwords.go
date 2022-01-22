@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `ucwords`
- *
- * Uppercase the first character of each word in a string
- * @see https://www.php.net/manual/en/function.ucwords.php
- *
- * @param string s
- * @param string separators
- * @return string
- */
 package functions
 
+// Uppercase the first character of each word in a string
 func Ucwords(s string, args ...string) string {
 	var separators string
 	if len(args) > 0 {

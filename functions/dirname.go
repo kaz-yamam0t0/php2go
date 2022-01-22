@@ -1,17 +1,8 @@
-/**
- * php `dirname` with Golang
- *
- * Returns a parent directory's path
- * @see https://www.php.net/manual/en/function.dirname.php
- *
- * @param string filepath
- * @param int levels
- * @return string
- */
 package functions
 
 import "path/filepath"
 
+// Returns a parent directory's path
 func Dirname(p string, args ...int) string {
 	if p == "/" || p == "." || p == "" {
 		return p[:]

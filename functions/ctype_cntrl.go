@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_cntrl`
- *
- * Check for control character(s)
- * @see https://www.php.net/manual/en/function.ctype-cntrl.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for control character(s)
 func CtypeCntrl(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

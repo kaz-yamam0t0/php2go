@@ -1,17 +1,6 @@
-/**
- * Golang equivalent to php `urlencode`
- *
- * URL-encodes string
- * @see https://www.php.net/manual/en/function.urlencode.php
- *
- * You can also use `net/url`.
- * @see https://pkg.go.dev/net/url
- *
- * @param string s
- * @return string
- */
 package functions
 
+// URL-encodes string
 func Urlencode(s string) string {
 	s_len := len(s)
 	pos := 0

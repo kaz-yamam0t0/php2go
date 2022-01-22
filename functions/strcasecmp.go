@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `strcasecmp`
- *
- * Binary safe case-insensitive string comparison
- * @see https://www.php.net/manual/en/function.strcasecmp.php
- *
- * @param string string1
- * @param string string2
- * @return int
- */
 package functions
 
+// Binary safe case-insensitive string comparison
 func Strcasecmp(s1 string, s2 string) int {
 	s1_len := len(s1)
 	s2_len := len(s2)

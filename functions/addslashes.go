@@ -1,14 +1,6 @@
-/**
- * php `addslashes` with Golang
- *
- * Quote string with slashes
- * @see https://www.php.net/manual/en/function.addslashes.php
- *
- * @param string s
- * @return string
- */
 package functions
 
+// Quote string with slashes
 func Addslashes(s string) string {
 	len := len(s)
 	pos := 0

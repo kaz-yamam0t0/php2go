@@ -1,16 +1,6 @@
-/**
- * Golang equivalent to php `str_replace`
- *
- * Replace all occurrences of the search string with the replacement string
- * @see https://www.php.net/manual/en/function.str-replace.php
- *
- * @param string search
- * @param string replace
- * @param string subject
- * @return string
- */
 package functions
 
+// Replace all occurrences of the search string with the replacement string
 func StrReplace(search string, replace string, s string) string {
 	s_len := len(s)
 	search_len := len(search)

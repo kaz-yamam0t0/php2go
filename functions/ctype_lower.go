@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_lower`
- *
- * Check for lowercase character(s)
- * @see https://www.php.net/manual/en/function.ctype-lower.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for lowercase character(s)
 func CtypeLower(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

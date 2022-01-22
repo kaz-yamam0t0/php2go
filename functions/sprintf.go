@@ -1,16 +1,3 @@
-/**
- * php `sprintf` with Golang
- *
- * Return a formatted string
- * @see https://www.php.net/manual/en/function.sprintf.php
- *
- * [Note]
- * This is a golang alternative of php `sprintf`, but I recommend `fmt`, golang standard library for formatting variables.
- *
- * @param string format
- * @param ...interface{} args
- * @return string
- */
 package functions
 
 import (
@@ -22,6 +9,11 @@ import (
 	"strings"
 )
 
+// Return a formatted string
+// 
+// [Note]
+// This is a golang alternative of php `sprintf`, but 
+// usually you can also use `fmt`, golang standard library for formatting variables.
 func Sprintf(format string, args ...interface{}) (string, error) {
 	// fmt.doPrintf
 	// https://cs.opensource.google/go/go/+/refs/tags/go1.17.5:src/fmt/print.go;drc=refs%2Ftags%2Fgo1.17.5;l=974

@@ -3,6 +3,7 @@ package functions
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestStrtotime(t *testing.T) {
@@ -37,3 +38,33 @@ func TestStrtotime(t *testing.T) {
 	assert.Equal(t, int64(1640856240), Strtotime("next Thursday", 1640769840)) // 2021-12-30 09:24:00
 	assert.Equal(t, int64(1640597040), Strtotime("last Monday", 1640769840))   // 2021-12-27 09:24:00
 }
+func ExampleStrtotime() {
+	// Strtotime(format string) returns int64
+	// or -1 when an error has occurred.
+
+	// general format
+	_ = Strtotime("10 September 2000")
+	_ = Strtotime("2000/09/10")
+	_ = Strtotime("2000-09-10")
+	_ = Strtotime("2000-09-10 12:34:56")
+
+	// American or European format (Ambiguious)
+	_ = Strtotime("9/10/2000")
+	_ = Strtotime("10.9.2000")
+	_ = Strtotime("10-9-2000")
+	// _ = Strtotime("2000.9.10") error
+
+	// various formats
+	_ = Strtotime("Wed, 29 Dec 2021 18:24:00 +0900")
+	_ = Strtotime("2021-12-29T18:24:00+09:00")
+	_ = Strtotime("Wednesday 29th December 2021 06:24:00 PM")
+
+	// relative format with int64 unixtime (seconds) or time.Time variable.
+	_ = Strtotime("+0 day", time.Now()) // import "time"
+	_ = Strtotime("+1 day 2 week 3 months -4 years 5 hours -6 minutes 7 seconds", time.Now())
+	_ = Strtotime("-1year -13months -8week", time.Now())
+
+	_ = Strtotime("next Thursday", time.Now())
+	_ = Strtotime("last Monday", time.Now())
+}
+

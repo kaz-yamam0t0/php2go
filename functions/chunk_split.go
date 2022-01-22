@@ -1,18 +1,8 @@
-/**
- * Golang equivalent to php `chunk_split`
- *
- * Split a string into smaller chunks
- * @see https://www.php.net/manual/en/function.chunk-split.php
- *
- * @param string s
- * @param int length
- * @param string separator
- * @return string
- */
 package functions
 
 import "math"
 
+// Split a string into smaller chunks
 func ChunkSplit(s string, args ...interface{}) string {
 	length := 76
 	separator := "\r\n"

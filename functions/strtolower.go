@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `strtolower`
- *
- * Make a string lowercase
- * @see https://www.php.net/manual/en/function.strtolower.php
- *
- * @param string s
- * @return string
- */
 package functions
 
+// Make a string lowercase
 func Strtolower(s string) string {
 	len_ := len(s)
 	dst := make([]byte, len_)

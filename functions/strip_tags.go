@@ -1,19 +1,10 @@
-/**
- * Golang equivalent to php `strip_tags`
- *
- * Strip HTML and PHP tags from a string
- * @see https://www.php.net/manual/en/function.strip-tags.php
- *
- * @param string s
- * @param string|[]string allowed_tags
- * @return string
- */
 package functions
 
 func _isTagChr(c byte) bool {
 	return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || c == '_' || c == '-'
 }
 
+// Strip HTML and PHP tags from a string
 func StripTags(s string, args ...interface{}) string {
 	var allowed []string
 

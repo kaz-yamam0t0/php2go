@@ -1,15 +1,10 @@
-/**
- * Golang equivalent to php `htmlspecialchars_decode`
- *
- * Convert special HTML entities back to characters
- * @see https://www.php.net/manual/en/function.htmlspecialchars-decode.php
- *
- * @param string s
- * @param int flags
- * @return string
- */
 package functions
 
+// Convert special HTML entities back to characters
+// 
+// Actually the sypnosis of HtmlspecialcharsDecode() is like this:
+// 
+//  HtmlspecialcharsDecode(s string[, flags int]) 
 func HtmlspecialcharsDecode(s string, args ...int) string {
 	var flags int = ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401
 	if len(args) >= 1 {

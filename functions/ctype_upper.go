@@ -1,14 +1,6 @@
-/**
- * Golang equivalent to php `ctype_upper`
- *
- * Check for uppercase character(s)
- * @see https://www.php.net/manual/en/function.ctype-upper.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for uppercase character(s)
 func CtypeUpper(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

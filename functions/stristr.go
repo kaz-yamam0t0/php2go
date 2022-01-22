@@ -1,20 +1,14 @@
-/**
- * Golang equivalent to php `stristr`
- *
- * Case-insensitive strstr
- * @see https://www.php.net/manual/en/function.stristr.php
- *
- * @param string haystack
- * @param string needle
- * @param bool before_needle
- * @return interface{}
- */
 package functions
 
 import (
 	"errors"
 )
 
+// Case-insensitive strstr
+// 
+// Actually the sypnosis of Stristr() is like this:
+// 
+//  Stristr(s string, needle string[, before_needle bool = 0]) 
 func Stristr(s string, needle string, args ...bool) (string, error) {
 	before_needle := false
 	if len(args) > 0 {

@@ -1,15 +1,6 @@
-/**
- * Golang equivalent to php `ctype_punct`
- *
- * Check for any printable character which is not whitespace or an
- *    alphanumeric character
- * @see https://www.php.net/manual/en/function.ctype-punct.php
- *
- * @param interface{} text
- * @return bool
- */
 package functions
 
+// Check for any printable character which is not whitespace or an alphanumeric character
 func CtypePunct(s string) bool {
 	s_len := len(s)
 	if s_len <= 0 {

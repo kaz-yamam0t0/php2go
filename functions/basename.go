@@ -1,17 +1,8 @@
-/**
- * php `basename` with Golang
- *
- * Returns trailing name component of path
- * @see https://www.php.net/manual/en/function.basename.php
- *
- * @param string filepath
- * @param string suffix
- * @return string
- */
 package functions
 
 import "path/filepath"
 
+// Returns trailing name component of path
 func Basename(p string, args ...string) string {
 	if p == "/" || p == "" {
 		return ""

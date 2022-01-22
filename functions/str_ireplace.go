@@ -1,16 +1,6 @@
-/**
- * Golang equivalent to php `str_ireplace`
- *
- * Case-insensitive version of str_replace
- * @see https://www.php.net/manual/en/function.str-ireplace.php
- *
- * @param string search
- * @param string replace
- * @param string subject
- * @return string
- */
 package functions
 
+// Case-insensitive version of str_replace
 func StrIreplace(search string, replace string, s string) string {
 	s_len := len(s)
 	search_len := len(search)

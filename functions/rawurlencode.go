@@ -1,16 +1,6 @@
-/**
- * Golang equivalent to php `rawurlencode`
- *
- * URL-encode according to RFC 3986
- * @see https://www.php.net/manual/en/function.rawurlencode.php
- *
- * @param string s
- * @return string
- */
 package functions
 
-
-
+// URL-encode according to RFC 3986
 func Rawurlencode(s string) string {
 	s_len := len(s)
 	pos := 0
