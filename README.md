@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-	fmt.Printf("now: %s\n", php2go.Date("Y-m-d H:i:s"))
+	// 2000-09-10 12:23:34
+	fmt.Printf("%s\n", php2go.Date("Y-m-d H:i:s", php2go.Strtotime("10 September 2000 12:23:34")))
 }
 ```
 
