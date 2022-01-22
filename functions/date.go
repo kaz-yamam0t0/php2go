@@ -201,7 +201,11 @@ func dateFormat(f byte, d time.Time) (string, bool) {
 	return "", false
 }
 
-// Format a local time/date (Some formats are not supported)
+// Format a local time/date
+// 
+// Actually the sypnosis of Date() is like this:
+// 
+//  Date(s string, baseTime int*|time.Time)
 func Date(s string, args ...interface{}) string {
 	var dt time.Time
 
@@ -209,6 +213,12 @@ func Date(s string, args ...interface{}) string {
 	if len(args) > 0 {
 		switch tmp := args[0].(type) {
 		case int:
+			dt = time.Unix(int64(tmp), 0)
+		case int8:
+			dt = time.Unix(int64(tmp), 0)
+		case int16:
+			dt = time.Unix(int64(tmp), 0)
+		case int32:
 			dt = time.Unix(int64(tmp), 0)
 		case int64:
 			dt = time.Unix(tmp, 0)
