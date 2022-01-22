@@ -1,6 +1,19 @@
 # php2go
 Golang equivalent to PHP functions
 
+## Usage
+
+```go
+import (
+	"fmt"
+	php2go "github.com/kaz-yamam0t0/php2go/functions"
+)
+
+func main() {
+	fmt.Printf("now: %s\n", php2go.Date("Y-m-d H:i:s"))
+}
+```
+
 ## Supported Functions
 
 #### strings
