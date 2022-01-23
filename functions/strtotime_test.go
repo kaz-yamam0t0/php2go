@@ -30,8 +30,11 @@ func TestStrtotime(t *testing.T) {
 	assert.Equal(t, int64(1640856240), Strtotime("+1 day", 1640769840))                                                       // 2021-12-30 09:24:00
 	assert.Equal(t, int64(1641461040), Strtotime("+1 day 1week", 1640769840))                                                 // 2022-01-06 09:24:00
 	assert.Equal(t, int64(1523629087), Strtotime("+1 day 2 week 3 months -4 years 5 hours -6 minutes 7 seconds", 1640769840)) // 2018-04-13 14:18:07
-	assert.Equal(t, int64(1570181040), Strtotime("-1year -13months -8week", 1640769840))                                      // 2019-10-08 09:24:00
-
+	assert.Equal(t, int64(1570181040), Strtotime("-1year -13months -8weeks", 1640769840))                                     // 2019-10-08 09:24:00
+	assert.Equal(t, int64(1570181040), Strtotime("1 year ago 13months ago 8 weeks ago", 1640769840))                          // 2019-10-08 09:24:00
+	
+	assert.Equal(t, int64(1640856240), Strtotime("P1D", 1640769840))                                                       // 2021-12-30 09:24:00
+	
 	// php `strtotime` seems not to do well with "next" or "prev" format and timezone.
 	//assert.Equal(t, int64(1640790000), Strtotime("next Thursday",1640769840)) // 2021-12-29 15:00:00
 	//assert.Equal(t, int64(1640530800), Strtotime("last Monday",1640769840)) // 2021-12-26 15:00:00
@@ -63,6 +66,8 @@ func ExampleStrtotime() {
 	_ = Strtotime("+0 day", time.Now()) // import "time"
 	_ = Strtotime("+1 day 2 week 3 months -4 years 5 hours -6 minutes 7 seconds", time.Now())
 	_ = Strtotime("-1year -13months -8week", time.Now())
+	_ = Strtotime("1 year ago", time.Now())
+	_ = Strtotime("P1Y2M3DT4H5M6.123456S", time.Now()) // ISO 8601 Interval Format
 
 	_ = Strtotime("next Thursday", time.Now())
 	_ = Strtotime("last Monday", time.Now())

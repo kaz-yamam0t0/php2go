@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"fmt"
 )
 
 // cache regexp.Regexp
@@ -22,6 +23,7 @@ var p_months *regexp.Regexp
 var p_weeks *regexp.Regexp
 var p_relative_pos *regexp.Regexp
 var p_pos *regexp.Regexp
+var p_iso *regexp.Regexp
 
 // should be called before each regexp variables are being used
 var init_flg bool
@@ -40,15 +42,16 @@ func initRegexp() {
 	p_norm_sp = regexp.MustCompile(`\s+`)
 
 	//p_sp        = regexp.MustCompile(`^[\s\n\r\t]$`)
-	p_now = regexp.MustCompile(`^now\b`)                                                                                                                                        // Now
+	p_now = regexp.MustCompile(`^now\b`)   // Now
 	p_dmy = regexp.MustCompile(`^(\d{1,2})(st|nd|rd|th)?\s*` + _months + `(\s+(\d+))?\b`)                                                                                       // 1st January 2006
 	p_ymd = regexp.MustCompile(`^(\d+)([/\-\.])(\d+)([/\-\.])(\d+)\b`)                                                                                                          // 2006-01-01
 	p_time = regexp.MustCompile(`^(\d{2})\:(\d{2})(\:(\d{2}))?( (a\.m\.|p\.m\.|am|pm))?\b`)                                                                                     // 00:00:00 am
 	p_tz = regexp.MustCompile(`^([\-\+]?)(\d{2})\:?(\d{2})\b`)                                                                                                                  // +09:00
 	p_months = regexp.MustCompile(`^` + _months + `\b`)                                                                                                                         // Junuary
 	p_weeks = regexp.MustCompile(`^` + _weeks + `\b`)                                                                                                                           // Sunday
-	p_relative_pos = regexp.MustCompile(`^([\+\-]?)\s*(\d+|a)\s*(year|month|day|hour|minute|second|week|millisecond|microsecond|msec|ms|µsec|µs|usec|sec|min|forth?night)s?\b`) // +1 year
+	p_relative_pos = regexp.MustCompile(`^([\+\-]?)\s*(\d+|a)\s*(year|month|day|hour|minute|second|week|millisecond|microsecond|msec|ms|µsec|µs|usec|sec|min|forth?night)s?(\s+ago)?\b`) // +1 year
 	p_pos = regexp.MustCompile(`^((first|last) day of )?(next|last) ((year|month|day)|` + _months + `|` + _weeks + `)\b`)                                                       // +1 year
+	p_iso = regexp.MustCompile(`^p((\d+)y)?((\d+)m)?((\d+)d)?(t((\d+)h)?((\d+)m)?((\d+(\.\d+)?)s)?)?\b`)                                     // P1Y2M3DT4H5M6.123456S
 }
 
 /*
@@ -75,6 +78,7 @@ func freeRegexp() {
 	p_relative_pos = nil
 	p_pos = nil
 
+	p_iso = nil
 
 }  */
 
@@ -224,6 +228,7 @@ func scanFormat(data *timeData, s string, pos int) int {
 		sign_ := _g[1]
 		n_ := 1
 		unit_ := _g[3]
+		ago_ := _g[4]
 
 		if tmp, err := strconv.Atoi(_g[2]); err == nil {
 			n_ = tmp
@@ -231,11 +236,33 @@ func scanFormat(data *timeData, s string, pos int) int {
 		if sign_ == "-" {
 			n_ = n_ * -1
 		}
+		if ago_ != "" {
+			n_ = n_ * -1
+		}
 
 		data.additions = append(data.additions, timeAddition{
 			n:    n_,
 			unit: unit_,
 		})
+		pos += len(_g[0])
+	} else if _g := p_iso.FindStringSubmatch(_s); len(_g) > 0 {
+		fmt.Print("iso")
+		// P1Y2M3DT4H5M6.7S =========
+		//for unit_, index_ := range map[string]int{"year":2,"month":4,"day":6,"hour":9,"minute":11,"sec":13} 
+		for unit_, index_ := range map[string]int{"year":2,"month":4,"day":6,"hour":9,"minute":11} {
+			if _g[index_] != "" {
+				if tmp, err := strconv.Atoi(_g[index_]); err == nil {
+					data.additions = append(data.additions, timeAddition{ n: tmp, unit: unit_})
+				}
+			}
+		}
+		if _g[13] != "" {
+			if tmp, err := strconv.ParseFloat(_g[4], 64); err == nil {
+				n_ := int(tmp * 1e9)
+				data.additions = append(data.additions, timeAddition{ n: n_, unit: "µsec"})
+			}
+		}
+
 		pos += len(_g[0])
 	} else if _g := p_pos.FindStringSubmatch(_s); len(_g) > 0 {
 		// (first|last day of) first|next year|month|day
@@ -485,7 +512,7 @@ func norm(hi, lo, base int) (nhi, nlo int) {
 }
 
 func parseTimeFormat(format string, base *time.Time) (*time.Time, *timeData) {
-	s := strings.TrimSpace(strings.ToLower(format))
+	s := strings.TrimSpace(strings.ToLower(format + " "))
 	if s == "" {
 		return nil, nil
 	}
