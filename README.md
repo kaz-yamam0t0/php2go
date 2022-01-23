@@ -15,6 +15,10 @@ func main() {
 }
 ```
 
+## Document
+
+https://pkg.go.dev/github.com/kaz-yamam0t0/php2go/functions
+
 ## Supported Functions
 
 #### strings
