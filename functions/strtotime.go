@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"fmt"
+	//"fmt"
 )
 
 // cache regexp.Regexp
@@ -246,7 +246,6 @@ func scanFormat(data *timeData, s string, pos int) int {
 		})
 		pos += len(_g[0])
 	} else if _g := p_iso.FindStringSubmatch(_s); len(_g) > 0 {
-		fmt.Print("iso")
 		// P1Y2M3DT4H5M6.7S =========
 		//for unit_, index_ := range map[string]int{"year":2,"month":4,"day":6,"hour":9,"minute":11,"sec":13} 
 		for unit_, index_ := range map[string]int{"year":2,"month":4,"day":6,"hour":9,"minute":11} {
