@@ -121,7 +121,6 @@ func dateFormat(f byte, d time.Time) (string, bool) {
 		}
 		return "0", true
 	case 'o':
-		// return strconv.Itoa(int(d.Year())), true // @TODO
 		_d := iso8601FirstDate(d)
 		_next_d := iso8601FirstDate(_d.AddDate(0, 0, 365+7))
 		_y := d.Year()
@@ -184,7 +183,8 @@ func dateFormat(f byte, d time.Time) (string, bool) {
 
 	// timezone
 	case 'e':
-		return "", true // (Not supported) @TODO
+		name_, _ := d.Zone()
+		return name_, true // (Not supported) @TODO
 	case 'I':
 		return "", true // (Not supported) @TODO
 	case 'Z':

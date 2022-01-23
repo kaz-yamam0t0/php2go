@@ -32,6 +32,7 @@ func TestDate(t *testing.T) {
 	assert.Equal(t, "24 00 000000 000", Date("i s u v", d))        // Minutes / Seconds
 	assert.Equal(t, "32400 +09:00 +0900", Date("Z P O", d))        // Timezone
 	assert.Equal(t, "2021-12-29T18:24:00+09:00", Date("c", d))
+	assert.Equal(t, "JST", Date("e", d))
 	assert.Equal(t, "JST", Date("T", d))
 	assert.Equal(t, "32400", Date("Z", d))
 	assert.Equal(t, "+09:00", Date("P", d))
