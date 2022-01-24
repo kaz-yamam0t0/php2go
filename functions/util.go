@@ -47,6 +47,8 @@ func c_hex(c byte) byte {
 	}
 	return 0
 }
+
+
 // Constants for escaping or unescaping html strings.
 const (
 	ENT_COMPAT     = 2    // Will convert double-quotes and leave single-quotes alone.
