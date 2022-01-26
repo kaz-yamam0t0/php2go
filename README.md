@@ -97,6 +97,7 @@ https://pkg.go.dev/github.com/kaz-yamam0t0/php2go/functions
 #### datetime
 
 * Date
+* DateCreateFromFormat
 * Strtotime
 
 #### url
