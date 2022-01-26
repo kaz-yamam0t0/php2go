@@ -28,12 +28,26 @@ type TimeAddition struct {
 	n    int     // number of difference
 	unit string  // unit of difference
 
+	h    int // set Hour
+	i    int // set Minute
+	s    int // set Second
+	us   int // set Microsecond
+
 	pos     string // first | next
 	month   int // number of month
 	weekday int // number of weekday
 	word    string // year | month|day
 	day_flg string // empty | first | last (day of)
 }
+func NewTimeAddition(n int, unit string) *TimeAddition {
+	a := TimeAddition{n, unit, -1, -1, -1, -1, "", -1, -1, "", ""}
+	return &a
+}
+func NewTimeAdditionWithTime(n int, unit string, h int, i int, s int, us int) *TimeAddition {
+	a := TimeAddition{n, unit, h, i, s, us, "", -1, -1, "", ""}
+	return &a
+}
+
 
 // Time Data
 type TimeData struct {
@@ -55,9 +69,14 @@ type TimeData struct {
 
 // create new TimeData
 func NewTimeData() *TimeData {
-	d := TimeData{1970, 1, 1, 0, 0, 0, 0, 0, 0, 0, nil, []TimeAddition{}, 0}
+	d := TimeData{1970, 1, 1, 0, 0, 0, 0, 0, 0, 0, nil, make([]TimeAddition, 0), 0}
 	return &d
 }
+
+func (data *TimeData) appendAddition(a *TimeAddition) {
+	data.additions = append(data.additions, *a)
+}
+
 
 // resetIfUnset
 func (data *TimeData) resetIfUnset() {
@@ -158,6 +177,15 @@ func (data *TimeData) setFromTime(t *time.Time) {
 	data.setTimezoneOffset(0)
 }
 
+func (data *TimeData) setNow() {
+	t := time.Now()
+	if data.loc != nil {
+		t = t.In(data.loc)
+	}
+	data.setFromTime(&t)
+}
+
+
 // ============================================================
 // flags
 // ============================================================
@@ -233,6 +261,7 @@ func norm(hi, lo, base int) (nhi, nlo int) {
 // time
 // ============================================================
 
+// convert to a time.Time variable
 func (data *TimeData) Time() *time.Time {
 	loc := time.Local
 	if data.loc != nil {
@@ -249,3 +278,120 @@ func (data *TimeData) Time() *time.Time {
 	return &res
 }
 
+
+// ============================================================
+// Addition
+// ============================================================
+
+func (data *TimeData) processAdditions() {
+	a_len := len(data.additions)
+	for i := 0; i < a_len; i++ {
+		data.move(&data.additions[i])
+	}
+	data.additions = []TimeAddition{}
+}
+
+func (data *TimeData) move(a *TimeAddition) {
+	if a.unit != "" {
+		data.add(a)
+		return
+	}
+	switch {
+	case a.month > 0:
+		if a.pos == "next" && data.m >= a.month {
+			data.y++
+		} else if a.pos == "last" && data.m <= a.month {
+			data.y--
+		}
+		data.m = a.month
+	case a.weekday >= 0:
+		w_ := int(time.Date(data.y, time.Month(data.m), data.d, data.h, data.i, data.s, data.us*1e3, time.Local).Weekday())
+		if a.pos == "next" {
+			n := (a.weekday+7-1-w_)%7 + 1
+			a.n, a.unit = n, "day"
+			data.add(a)
+		} else if a.pos == "last" {
+			n := -((w_+7-1-a.weekday)%7 + 1)
+			a.n, a.unit = n, "day"
+			data.add(a)
+		}
+	case a.word != "":
+		if a.word != "year" && a.word != "month" && a.word != "day" {
+			panic("unknown word") // never be occurred
+		}
+		n := -1
+		if a.pos == "next" {
+			n = 1
+		}
+		a.n, a.unit = n, a.word
+		data.add(a)
+	}
+
+}
+func (data *TimeData) add(a *TimeAddition) {
+	// might be outside of the range
+	// it will be normalized when data is instantiated.
+	switch a.unit {
+	case "year":
+		data.y += a.n
+	case "month":
+		data.m += a.n
+	case "day":
+		data.d += a.n
+	case "hour":
+		data.h += a.n
+	case "min":
+		fallthrough
+	case "minute":
+		data.i += a.n
+	case "sec":
+		fallthrough
+	case "second":
+		data.s += a.n
+	case "ms":
+		fallthrough
+	case "msec":
+		fallthrough
+	case "millisecond":
+		data.us += a.n * 1e3
+	case "µs":
+		fallthrough
+	case "µsec":
+		fallthrough
+	case "microsecond":
+		data.us += a.n
+	case "week":
+		data.d += a.n * 7
+	case "forthnight":
+		fallthrough
+	case "fortnight":
+		data.d += a.n * 14
+	default:
+		panic("unsupported units")
+	}
+	data.normalize()
+
+	/*
+	if a.y > 0 {
+		data.y = a.y
+	}
+	if a.m > 0 {
+		data.m = a.m
+	}
+	if a.d > 0 {
+		data.d = a.d
+	} */
+	if a.h >= 0 {
+		data.h = a.h
+	}
+	if a.i >= 0 {
+		data.i = a.i
+	}
+	if a.s >= 0 {
+		data.s = a.s
+	}
+	if a.us >= 0 {
+		data.us = a.us
+	}
+	data.normalize()
+}

@@ -36,10 +36,10 @@ func Strtotime(format string, args ...interface{}) int64 {
 		t_ := time.Now()
 		base = time.Date(t_.Year(), t_.Month(), t_.Day(), 0, 0, 0, 0, t_.Location())
 	}
-	res, t := php2go_date.ParseTimeFormat(format, &base)
-	if res == nil {
+	res, err := php2go_date.ParseTimeFormat(format, &base)
+	if err != nil {
 		return -1
 	}
 
-	return t
+	return res.Unix()
 }

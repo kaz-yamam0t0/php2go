@@ -1,5 +1,9 @@
 package date
 
+import (
+	"strings"
+)
+
 // ==============================================================
 // get*Table
 // ==============================================================
@@ -62,6 +66,16 @@ func isAlphanumeric(c byte) bool {
 	return ('0' <= c && c <= '9') || ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')
 }
 
+func cmpichr(a byte, b byte) bool {
+	if 'A' <= a && a <= 'Z' {
+		a = a - 'A' + 'a'
+	}
+	if 'A' <= b && b <= 'Z' {
+		b = b - 'A' + 'a'
+	}
+	return a == b
+}
+
 // ==============================================================
 // skip*
 // ==============================================================
@@ -85,4 +99,78 @@ func skipChars(s *string, pos_s *int, callback func(c byte) bool) int {
 	}
 	return (*pos_s) - start_pos
 }
+
+// ==============================================================
+// others
+// ==============================================================
+
+
+// check if ymd is correct
+func checkDate(y int, m int, d int) bool {
+	if y < 0 || (m < 1 || 12 < m) || (d < 1 || 31 < d) {
+		return false
+	}
+	return d <= getLastDay(y, m)
+}
+
+// get the last day of a month
+func getLastDay(y int, m int) int {
+	if m == 4 || m == 6 || m == 9 || m == 11 {
+		return 30
+	}
+	if m == 2 {
+		if y%4 == 0 && (y%100 != 0 || y%400 == 0) {
+			return 29
+		} else {
+			return 28
+		}
+	}
+	return 31
+}
+
+// month name string to number
+func getMonthNum(s string) int {
+	// month_name should be the lower cases of a correct month name
+	for month_name, month_num := range getMonthTable() {
+		if s == month_name {
+			return month_num
+		}
+	}
+	return -1
+}
+// starts with month name
+func startsWithMonthName(s string) (int, string) {
+	// month_name should be the lower cases of a correct month name
+	for month_name, month_num := range getMonthTable() {
+		if strings.HasPrefix(s, month_name) {
+			return month_num, month_name
+		}
+	}
+	return -1, ""
+} 
+
+
+// weekday name string to number
+func getWeekdayNum(s string) int {
+	// day_name should be the lower cases of a correct day name
+	for weekday_name, weekday_num := range getWeekdayTable() {
+		if s == weekday_name {
+			return weekday_num
+		}
+	}
+	return -1
+}
+// starts with month name
+func startsWithWeekdayName(s string) (int, string) {
+	// month_name should be the lower cases of a correct month name
+	if len(s) < 3 {
+		return -1, ""
+	}
+	for weekday_name, weekday_num := range getWeekdayTable() {
+		if strings.HasPrefix(s, weekday_name) || s[:3] == weekday_name[:3] {
+			return weekday_num, weekday_name
+		}
+	}
+	return -1, ""
+} 
 

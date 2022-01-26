@@ -168,8 +168,6 @@ func TestDateCreateFromFormat(t *testing.T) {
 	}
 }
 
-
-
 func ExampleDateCreateFromFormat() {
 	// `DateCreateFromFormat` returns a time.Time variable
 	// 2021-12-29 18:24:12 +0900 JST
