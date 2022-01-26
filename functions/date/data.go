@@ -23,7 +23,7 @@ const (
 )
 
 // Relative Additions or Subtractions
-type TimeAddition struct {
+type timeAddition struct {
 	n    int    // number of difference
 	unit string // unit of difference
 
@@ -39,17 +39,17 @@ type TimeAddition struct {
 	day_flg string // empty | first | last (day of)
 }
 
-func NewTimeAddition(n int, unit string) *TimeAddition {
-	a := TimeAddition{n, unit, -1, -1, -1, -1, "", -1, -1, "", ""}
+func newTimeAddition(n int, unit string) *timeAddition {
+	a := timeAddition{n, unit, -1, -1, -1, -1, "", -1, -1, "", ""}
 	return &a
 }
-func NewTimeAdditionWithTime(n int, unit string, h int, i int, s int, us int) *TimeAddition {
-	a := TimeAddition{n, unit, h, i, s, us, "", -1, -1, "", ""}
+func newTimeAdditionWithTime(n int, unit string, h int, i int, s int, us int) *timeAddition {
+	a := timeAddition{n, unit, h, i, s, us, "", -1, -1, "", ""}
 	return &a
 }
 
 // Time Data
-type TimeData struct {
+type timeData struct {
 	y         int            // Year
 	m         int            // Month
 	d         int            // Date
@@ -61,23 +61,23 @@ type TimeData struct {
 	day       int            // Weekday (actually doesn't affect the result)
 	z         int            // Timezone Offset
 	loc       *time.Location // Timezone Location
-	additions []TimeAddition // Relative differences
+	additions []timeAddition // Relative differences
 
 	flags int // flags
 }
 
 // create new TimeData
-func NewTimeData() *TimeData {
-	d := TimeData{1970, 1, 1, 0, 0, 0, 0, 0, 0, 0, nil, make([]TimeAddition, 0), 0}
+func newTimeData() *timeData {
+	d := timeData{1970, 1, 1, 0, 0, 0, 0, 0, 0, 0, nil, make([]timeAddition, 0), 0}
 	return &d
 }
 
-func (data *TimeData) appendAddition(a *TimeAddition) {
+func (data *timeData) appendAddition(a *timeAddition) {
 	data.additions = append(data.additions, *a)
 }
 
 // resetIfUnset
-func (data *TimeData) resetIfUnset() {
+func (data *timeData) resetIfUnset() {
 	if !data.hasFlag(SET_YEAR) {
 		data.y = 1970
 	}
@@ -108,7 +108,7 @@ func (data *TimeData) resetIfUnset() {
 }
 
 // reset
-func (data *TimeData) reset() {
+func (data *timeData) reset() {
 	data.y = 1970
 	data.m = 1
 	data.d = 1
@@ -126,43 +126,43 @@ func (data *TimeData) reset() {
 // setter
 // ============================================================
 
-func (data *TimeData) setYear(y int) {
+func (data *timeData) setYear(y int) {
 	data.y = y
 	data.flags |= SET_YEAR
 }
-func (data *TimeData) setMonth(m int) {
+func (data *timeData) setMonth(m int) {
 	data.m = m
 	data.flags |= SET_MONTH
 }
-func (data *TimeData) setDay(d int) {
+func (data *timeData) setDay(d int) {
 	data.d = d
 	data.flags |= SET_DAY
 }
-func (data *TimeData) setHour(h int) {
+func (data *timeData) setHour(h int) {
 	data.h = h
 	data.flags |= SET_HOUR
 }
-func (data *TimeData) setMinute(i int) {
+func (data *timeData) setMinute(i int) {
 	data.i = i
 	data.flags |= SET_MINUTE
 }
-func (data *TimeData) setSecond(s int) {
+func (data *timeData) setSecond(s int) {
 	data.s = s
 	data.flags |= SET_SECOND
 }
-func (data *TimeData) setMicrosecond(s int) {
+func (data *timeData) setMicrosecond(s int) {
 	data.us = s
 	data.flags |= SET_MICROSECOND
 }
-func (data *TimeData) setTimezoneOffset(z int) {
+func (data *timeData) setTimezoneOffset(z int) {
 	data.z = z
 	data.flags |= SET_TIMEZONE_OFFSET
 }
-func (data *TimeData) setLocation(loc *time.Location) {
+func (data *timeData) setLocation(loc *time.Location) {
 	data.loc = loc
 	data.flags |= SET_TIMEZONE_LOCATION
 }
-func (data *TimeData) setFromTime(t *time.Time) {
+func (data *timeData) setFromTime(t *time.Time) {
 	data.setYear(t.Year())
 	data.setMonth(int(t.Month()))
 	data.setDay(t.Day())
@@ -176,7 +176,7 @@ func (data *TimeData) setFromTime(t *time.Time) {
 	data.setTimezoneOffset(0)
 }
 
-func (data *TimeData) setNow() {
+func (data *timeData) setNow() {
 	t := time.Now()
 	if data.loc != nil {
 		t = t.In(data.loc)
@@ -187,7 +187,7 @@ func (data *TimeData) setNow() {
 // ============================================================
 // flags
 // ============================================================
-func (data *TimeData) hasFlag(f int) bool {
+func (data *timeData) hasFlag(f int) bool {
 	return (data.flags & f) == f
 }
 
@@ -196,7 +196,7 @@ func (data *TimeData) hasFlag(f int) bool {
 // ============================================================
 
 // normalize Year, Month, Date, Hour, Minute, Second, Millisecond
-func (data *TimeData) normalize() {
+func (data *timeData) normalize() {
 	data.s, data.us = norm(data.s, data.us, 1000000)
 	data.i, data.s = norm(data.i, data.s, 60)
 	data.h, data.i = norm(data.h, data.i, 60)
@@ -207,7 +207,7 @@ func (data *TimeData) normalize() {
 }
 
 // normalize Year, Month, Date
-func (data *TimeData) normalizeYmd() {
+func (data *timeData) normalizeYmd() {
 	// year, month
 	m := data.m - 1
 	data.y, m = norm(data.y, m, 12)
@@ -259,7 +259,7 @@ func norm(hi, lo, base int) (nhi, nlo int) {
 // ============================================================
 
 // convert to a time.Time variable
-func (data *TimeData) Time() *time.Time {
+func (data *timeData) Time() *time.Time {
 	loc := time.Local
 	if data.loc != nil {
 		loc = data.loc
@@ -279,15 +279,15 @@ func (data *TimeData) Time() *time.Time {
 // Addition
 // ============================================================
 
-func (data *TimeData) processAdditions() {
+func (data *timeData) processAdditions() {
 	a_len := len(data.additions)
 	for i := 0; i < a_len; i++ {
 		data.move(&data.additions[i])
 	}
-	data.additions = []TimeAddition{}
+	data.additions = []timeAddition{}
 }
 
-func (data *TimeData) move(a *TimeAddition) {
+func (data *timeData) move(a *timeAddition) {
 	if a.unit != "" {
 		data.add(a)
 		return
@@ -324,7 +324,7 @@ func (data *TimeData) move(a *TimeAddition) {
 	}
 
 }
-func (data *TimeData) add(a *TimeAddition) {
+func (data *timeData) add(a *timeAddition) {
 	// might be outside of the range
 	// it will be normalized when data is instantiated.
 	switch a.unit {

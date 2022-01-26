@@ -462,7 +462,7 @@ func scanRelativePosition(s string, pos_s int) (n int, unit string, length int) 
 
 	return n, unit, (pos - pos_s)
 }
-func scanPosition(s string, pos_s int) (*TimeAddition, int) {
+func scanPosition(s string, pos_s int) (*timeAddition, int) {
 	// `^((first|last) day of )?(next|last) ((year|month|day)|` + _months + `|` + _weeks + `)
 
 	pos := pos_s
@@ -523,7 +523,7 @@ day_pos:
 	}
 
 	// new time addition
-	a := NewTimeAddition(0, "")
+	a := newTimeAddition(0, "")
 	if day_flg_ != nil {
 		a.day_flg = *day_flg_
 	}
@@ -538,9 +538,9 @@ day_pos:
 	}
 	return a, (pos - pos_s)
 }
-func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
+func scanISOInterval(s string, pos_s int) ([]*timeAddition, int) {
 	// P1Y2M3DT4H5M6.7S
-	a := make([]*TimeAddition, 0, 7)
+	a := make([]*timeAddition, 0, 7)
 
 	s_len := len(s)
 	pos := pos_s
@@ -571,11 +571,11 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 
 		switch c {
 		case 'y':
-			a = append(a, NewTimeAddition(n, "year"))
+			a = append(a, newTimeAddition(n, "year"))
 		case 'm':
-			a = append(a, NewTimeAddition(n, "month"))
+			a = append(a, newTimeAddition(n, "month"))
 		case 'd':
-			a = append(a, NewTimeAddition(n, "day"))
+			a = append(a, newTimeAddition(n, "day"))
 		default:
 			break
 		}
@@ -610,13 +610,13 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 
 		switch c {
 		case 'h':
-			a = append(a, NewTimeAddition(n, "hour"))
+			a = append(a, newTimeAddition(n, "hour"))
 		case 'm':
-			a = append(a, NewTimeAddition(n, "minute"))
+			a = append(a, newTimeAddition(n, "minute"))
 		case 's':
-			a = append(a, NewTimeAddition(n, "second"))
+			a = append(a, newTimeAddition(n, "second"))
 			if d > 0 {
-				a = append(a, NewTimeAddition(int(d*1e6), "microsecond"))
+				a = append(a, newTimeAddition(int(d*1e6), "microsecond"))
 			}
 		default:
 			break
@@ -627,7 +627,7 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 }
 
 // scan format chunk and add pos
-func scanFormat(data *TimeData, s string, pos int) int {
+func scanFormat(data *timeData, s string, pos int) int {
 	s_len := len(s)
 	if pos >= s_len {
 		return -1
@@ -649,16 +649,16 @@ func scanFormat(data *TimeData, s string, pos int) int {
 		data.setNow()
 		pos += len_
 	} else if len_ := scanWord(s, pos, "yesterday", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(-1, "day", 0, 0, 0, 0))
+		data.appendAddition(newTimeAdditionWithTime(-1, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if len_ := scanWord(s, pos, "midnight", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
+		data.appendAddition(newTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if len_ := scanWord(s, pos, "today", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
+		data.appendAddition(newTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if len_ := scanWord(s, pos, "noon", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
+		data.appendAddition(newTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if m_, len_ := scanMonth(s, pos); len_ >= 0 {
 		// month name
@@ -670,7 +670,7 @@ func scanFormat(data *TimeData, s string, pos int) int {
 		pos += len_
 	} else if n_, unit_, len_ := scanRelativePosition(s, pos); len_ >= 0 {
 		// relative format (1 year .. etc)
-		data.appendAddition(NewTimeAddition(n_, unit_))
+		data.appendAddition(newTimeAddition(n_, unit_))
 		pos += len_
 	} else if a_, len_ := scanISOInterval(s, pos); len_ >= 0 {
 		// iso8601 interval format (P1Y2M3DT1H2M3S)
@@ -723,8 +723,7 @@ func scanFormat(data *TimeData, s string, pos int) int {
 	return pos
 }
 
-// Parse string to a time.Time variable
-//func ParseTimeFormat(format string, base *time.Time) (*time.Time, *TimeData) {
+// Parse string text to a time.Time variable
 func ParseTimeFormat(format string, base *time.Time) (*time.Time, error) {
 	s := strings.TrimSpace(strings.ToLower(format))
 	if s == "" {
@@ -732,7 +731,7 @@ func ParseTimeFormat(format string, base *time.Time) (*time.Time, error) {
 	}
 
 	// data
-	data := NewTimeData()
+	data := newTimeData()
 
 	if base == nil {
 		t_ := time.Now()

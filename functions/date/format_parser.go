@@ -237,7 +237,7 @@ func parseSuffix(s *string, pos_s *int) bool {
 	return false
 }
 
-func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeData) (int, error) {
+func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *timeData) (int, error) {
 	if (*format)[*pos] == '\\' {
 		(*pos)++
 		if (*format)[*pos] == (*s)[*pos_s] {
@@ -523,7 +523,7 @@ func ParseFormat(format string, s string) (*time.Time, error) {
 
 	tmp := 0
 
-	data := NewTimeData()
+	data := newTimeData()
 	for pos < f_len {
 		// skip spaces
 		if isSpace(format[pos]) {
