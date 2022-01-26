@@ -1,14 +1,12 @@
 package functions
 
 import (
-	"time"
 	php2go_date "github.com/kaz-yamam0t0/php2go/functions/date"
+	"time"
 )
 
-
-func Str2Time(format string, base *time.Time) *time.Time {
-	res, _ := php2go_date.ParseTimeFormat(format, base)
-	return res
+func Str2Time(format string, base *time.Time) (*time.Time, error) {
+	return php2go_date.ParseTimeFormat(format, base)
 }
 
 // Parse about any English textual datetime description into a Unix timestamp

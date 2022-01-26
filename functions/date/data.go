@@ -17,28 +17,28 @@ const (
 	SET_TIMEZONE_OFFSET   = 128
 	SET_TIMEZONE_LOCATION = 256
 
-	SET_AP                = 512
+	SET_AP = 512
 
-	SKIP_ERRORS           = 1024
+	SKIP_ERRORS = 1024
 )
-
 
 // Relative Additions or Subtractions
 type TimeAddition struct {
-	n    int     // number of difference
-	unit string  // unit of difference
+	n    int    // number of difference
+	unit string // unit of difference
 
-	h    int // set Hour
-	i    int // set Minute
-	s    int // set Second
-	us   int // set Microsecond
+	h  int // set Hour
+	i  int // set Minute
+	s  int // set Second
+	us int // set Microsecond
 
 	pos     string // first | next
-	month   int // number of month
-	weekday int // number of weekday
+	month   int    // number of month
+	weekday int    // number of weekday
 	word    string // year | month|day
 	day_flg string // empty | first | last (day of)
 }
+
 func NewTimeAddition(n int, unit string) *TimeAddition {
 	a := TimeAddition{n, unit, -1, -1, -1, -1, "", -1, -1, "", ""}
 	return &a
@@ -48,23 +48,22 @@ func NewTimeAdditionWithTime(n int, unit string, h int, i int, s int, us int) *T
 	return &a
 }
 
-
 // Time Data
 type TimeData struct {
-	y         int // Year
-	m         int // Month
-	d         int // Date
-	h         int // Hour
-	i         int // Minute
-	s         int // Second
-	us        int // Microsecond
-	ap        int // AM/PM flag (1=AM 2=PM)
-	day       int // Weekday (actually doesn't affect the result)
-	z         int // Timezone Offset
+	y         int            // Year
+	m         int            // Month
+	d         int            // Date
+	h         int            // Hour
+	i         int            // Minute
+	s         int            // Second
+	us        int            // Microsecond
+	ap        int            // AM/PM flag (1=AM 2=PM)
+	day       int            // Weekday (actually doesn't affect the result)
+	z         int            // Timezone Offset
 	loc       *time.Location // Timezone Location
 	additions []TimeAddition // Relative differences
 
-	flags     int // flags
+	flags int // flags
 }
 
 // create new TimeData
@@ -77,37 +76,37 @@ func (data *TimeData) appendAddition(a *TimeAddition) {
 	data.additions = append(data.additions, *a)
 }
 
-
 // resetIfUnset
 func (data *TimeData) resetIfUnset() {
-	if ! data.hasFlag(SET_YEAR) {
+	if !data.hasFlag(SET_YEAR) {
 		data.y = 1970
 	}
-	if ! data.hasFlag(SET_MONTH) {
+	if !data.hasFlag(SET_MONTH) {
 		data.m = 1
 	}
-	if ! data.hasFlag(SET_DAY) {
+	if !data.hasFlag(SET_DAY) {
 		data.d = 1
 	}
-	if ! data.hasFlag(SET_HOUR) {
+	if !data.hasFlag(SET_HOUR) {
 		data.h = 0
 	}
-	if ! data.hasFlag(SET_MINUTE) {
+	if !data.hasFlag(SET_MINUTE) {
 		data.i = 0
 	}
-	if ! data.hasFlag(SET_SECOND) {
+	if !data.hasFlag(SET_SECOND) {
 		data.s = 0
 	}
-	if ! data.hasFlag(SET_MICROSECOND) {
+	if !data.hasFlag(SET_MICROSECOND) {
 		data.us = 0
 	}
-	if ! data.hasFlag(SET_TIMEZONE_OFFSET) {
+	if !data.hasFlag(SET_TIMEZONE_OFFSET) {
 		data.z = 0
 	}
-	if ! data.hasFlag(SET_TIMEZONE_LOCATION) {
+	if !data.hasFlag(SET_TIMEZONE_LOCATION) {
 		data.loc = nil
 	}
 }
+
 // reset
 func (data *TimeData) reset() {
 	data.y = 1970
@@ -172,7 +171,7 @@ func (data *TimeData) setFromTime(t *time.Time) {
 	data.setSecond(t.Second())
 	data.setMicrosecond(int(t.Nanosecond() / 1e3))
 	data.setLocation(t.Location())
-	
+
 	//_, offset_ := base.Zone()
 	data.setTimezoneOffset(0)
 }
@@ -185,14 +184,12 @@ func (data *TimeData) setNow() {
 	data.setFromTime(&t)
 }
 
-
 // ============================================================
 // flags
 // ============================================================
 func (data *TimeData) hasFlag(f int) bool {
 	return (data.flags & f) == f
 }
-
 
 // ============================================================
 // normalize
@@ -271,13 +268,12 @@ func (data *TimeData) Time() *time.Time {
 
 	if data.z != 0 {
 		tmp := res.Unix()
-		tmp += int64(data.z) 
-		res = time.Unix(tmp,0).In(loc)
+		tmp += int64(data.z)
+		res = time.Unix(tmp, 0).In(loc)
 	}
 
 	return &res
 }
-
 
 // ============================================================
 // Addition
@@ -372,15 +368,15 @@ func (data *TimeData) add(a *TimeAddition) {
 	data.normalize()
 
 	/*
-	if a.y > 0 {
-		data.y = a.y
-	}
-	if a.m > 0 {
-		data.m = a.m
-	}
-	if a.d > 0 {
-		data.d = a.d
-	} */
+		if a.y > 0 {
+			data.y = a.y
+		}
+		if a.m > 0 {
+			data.m = a.m
+		}
+		if a.d > 0 {
+			data.d = a.d
+		} */
 	if a.h >= 0 {
 		data.h = a.h
 	}

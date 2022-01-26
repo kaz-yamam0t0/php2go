@@ -7,11 +7,11 @@ import (
 )
 
 // Convert special characters to HTML entities
-// 
+//
 // Actually the sypnosis of Htmlspecialchars() is like this:
-// 
-//  Htmlspecialchars(s string[, flags int[, encoding string[, double_encode bool]]]) 
-// 
+//
+//  Htmlspecialchars(s string[, flags int[, encoding string[, double_encode bool]]])
+//
 // [Note] You can also use `html.EscapeString()`
 func Htmlspecialchars(s string, args ...interface{}) string {
 	var flags int = ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401

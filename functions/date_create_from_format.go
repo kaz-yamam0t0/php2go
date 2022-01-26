@@ -2,8 +2,8 @@ package functions
 
 import (
 	//"strconv"
-	"time"
 	php2go_date "github.com/kaz-yamam0t0/php2go/functions/date"
+	"time"
 )
 
 // Parses a time string according to a specified format

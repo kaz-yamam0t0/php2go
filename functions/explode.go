@@ -2,11 +2,10 @@ package functions
 
 import "strings"
 
-
 // Split a string by a string
-// 
+//
 // Actually the sypnosis of Explode is like this:
-// 
+//
 //  Explode(separator string, s string[, int limit=-1]) []string
 func Explode(separator string, s string, args ...int) []string {
 	limit := 9223372036854775807

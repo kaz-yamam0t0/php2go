@@ -15,7 +15,7 @@ func detectLocation(zone_name string) (*time.Location, error) {
 
 	// @TODO detect unknown location
 	data := [][]string{
-		{"JST", "Asia/Tokyo"}, 
+		{"JST", "Asia/Tokyo"},
 	}
 	for _, items := range data {
 		hit := -1
@@ -49,7 +49,7 @@ func parseLocation(s *string, pos_s *int) (*time.Location, bool, error) {
 	pos := *pos_s
 
 	for pos < s_len {
-		if (*s)[pos] == '/' || (*s)[pos] == '_' || (*s)[pos] == '+' || (*s)[pos] == '-' || ('a' <= (*s)[pos] && (*s)[pos] <= 'z') || ('A' <= (*s)[pos] && (*s)[pos] <= 'Z')  || ('0' <= (*s)[pos] && (*s)[pos] <= '9') {
+		if (*s)[pos] == '/' || (*s)[pos] == '_' || (*s)[pos] == '+' || (*s)[pos] == '-' || ('a' <= (*s)[pos] && (*s)[pos] <= 'z') || ('A' <= (*s)[pos] && (*s)[pos] <= 'Z') || ('0' <= (*s)[pos] && (*s)[pos] <= '9') {
 			pos++
 		} else {
 			break
@@ -62,9 +62,8 @@ func parseLocation(s *string, pos_s *int) (*time.Location, bool, error) {
 		return nil, false, errors.New(fmt.Sprintf("invalid timezone name : %s", (*s)[start_pos:pos]))
 	}
 	(*pos_s) = pos
-	
-	//https://github.com/golang/go/blob/eef0140137bae3bc059f598843b8777f9223fac8/src/time/zoneinfo_unix.go#L19-L26
 
+	// https://github.com/golang/go/blob/eef0140137bae3bc059f598843b8777f9223fac8/src/time/zoneinfo_unix.go#L19-L26
 	zone_name := (*s)[start_pos:pos]
 	//loc, err := time.LoadLocation(zone_name)
 	loc, err := detectLocation(zone_name)
@@ -107,7 +106,7 @@ func parseZoneOffset(s *string, pos_s *int) (int, bool) {
 			(*pos_s)++
 			m_, _ = parseInt(s, pos_s, 2, 2)
 
-			tz := (h_ * 60 + m_) * 60 * sign_
+			tz := (h_*60 + m_) * 60 * sign_
 			return tz, true
 		}
 	}
@@ -119,15 +118,15 @@ func parseZoneOffset(s *string, pos_s *int) (int, bool) {
 			(*pos_s)++
 			m_, _ = parseInt(s, pos_s, 2, 2)
 
-			tz := (h_ * 60 + m_) * 60 * sign_
+			tz := (h_*60 + m_) * 60 * sign_
 			return tz, true
-		} else if n_, ok = parseInt(s, pos_s, 4,4); ok {
+		} else if n_, ok = parseInt(s, pos_s, 4, 4); ok {
 			h_ = (n_ / 100)
 			m_ = (n_ % 100)
 			if h_ > 60 || m_ > 60 {
 				return -1, false
 			}
-			tz := (h_ * 60 + m_) * 60 * sign_
+			tz := (h_*60 + m_) * 60 * sign_
 			return tz, true
 		}
 	}
@@ -147,7 +146,7 @@ func parseAMPM(s *string, pos_s *int) (int, bool) {
 	case strings.HasPrefix(_s, "am"):
 		*pos_s += 2
 		return AM, true
-	
+
 	// PM
 	case strings.HasPrefix(_s, "p.m."):
 		*pos_s += 4
@@ -163,7 +162,7 @@ func parseAMPM(s *string, pos_s *int) (int, bool) {
 }
 func parseMonth(s *string, pos_s *int) (int, bool) {
 	month_num, month_name := startsWithMonthName(strings.ToLower((*s)[*pos_s:]))
-	if (month_num > 0) {
+	if month_num > 0 {
 		*pos_s += len(month_name)
 		return month_num, true
 	}
@@ -171,7 +170,7 @@ func parseMonth(s *string, pos_s *int) (int, bool) {
 }
 func parseWeekday(s *string, pos_s *int) (int, bool) {
 	weekday_num, weekday_name := startsWithWeekdayName(strings.ToLower((*s)[*pos_s:]))
-	if (weekday_num > 0) {
+	if weekday_num > 0 {
 		*pos_s += len(weekday_name)
 		return weekday_num, true
 	}
@@ -180,7 +179,7 @@ func parseWeekday(s *string, pos_s *int) (int, bool) {
 func parseInt(s *string, pos_s *int, min_length int, max_length int) (int, bool) {
 	s_len := len(*s)
 	max_ := max_length
-	if s_len - *pos_s < max_ {
+	if s_len-*pos_s < max_ {
 		max_ = s_len - *pos_s
 	}
 	if max_ < min_length {
@@ -195,7 +194,7 @@ func parseInt(s *string, pos_s *int, min_length int, max_length int) (int, bool)
 			}
 			break
 		}
-		res = res * 10 + int((*s)[*pos_s] - '0')
+		res = res*10 + int((*s)[*pos_s]-'0')
 		(*pos_s)++
 	}
 	return res, true
@@ -203,7 +202,7 @@ func parseInt(s *string, pos_s *int, min_length int, max_length int) (int, bool)
 func parseDecimal(s *string, pos_s *int, min_length int, max_length int) (float64, bool) {
 	s_len := len(*s)
 	max_ := max_length
-	if s_len - *pos_s < max_ {
+	if s_len-*pos_s < max_ {
 		max_ = s_len - *pos_s
 	}
 	if max_ < min_length {
@@ -219,7 +218,7 @@ func parseDecimal(s *string, pos_s *int, min_length int, max_length int) (float6
 			}
 			break
 		}
-		res += float64((*s)[*pos_s] - '0') / div
+		res += float64((*s)[*pos_s]-'0') / div
 		div = div * 10
 		(*pos_s)++
 	}
@@ -227,10 +226,10 @@ func parseDecimal(s *string, pos_s *int, min_length int, max_length int) (float6
 }
 
 func parseSuffix(s *string, pos_s *int) bool {
-	if len(*s) <= *pos_s + 1 {
+	if len(*s) <= *pos_s+1 {
 		return false
 	}
-	s_ := strings.ToLower((*s)[*pos_s:*pos_s+2])
+	s_ := strings.ToLower((*s)[*pos_s : *pos_s+2])
 	if s_ == "st" || s_ == "nd" || s_ == "rd" || s_ == "th" {
 		*pos_s += 2
 		return true
@@ -239,7 +238,7 @@ func parseSuffix(s *string, pos_s *int) bool {
 }
 
 func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeData) (int, error) {
-	if ((*format)[*pos] == '\\') {
+	if (*format)[*pos] == '\\' {
 		(*pos)++
 		if (*format)[*pos] == (*s)[*pos_s] {
 			(*pos)++
@@ -254,7 +253,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'd':
 		fallthrough
 	case 'j':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n < 0 || 31 < n {
@@ -266,7 +265,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'D':
 		fallthrough
 	case 'l':
-		if n, ok = parseWeekday(s, pos_s); ! ok {
+		if n, ok = parseWeekday(s, pos_s); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		d.setDay(n)
@@ -278,8 +277,8 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 		}
 		(*pos)++
 	// Day of Year
-	case 'z' :
-		if n, ok = parseInt(s, pos_s, 1, 3); ! ok {
+	case 'z':
+		if n, ok = parseInt(s, pos_s, 1, 3); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n <= 0 || 365 < n {
@@ -293,7 +292,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'm':
 		fallthrough
 	case 'n':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n < 0 || 12 < n {
@@ -304,20 +303,20 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'F':
 		fallthrough
 	case 'M':
-		if n, ok = parseMonth(s, pos_s); ! ok {
+		if n, ok = parseMonth(s, pos_s); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		d.setMonth(n)
 		(*pos)++
 	// Year
 	case 'Y':
-		if n, ok = parseInt(s, pos_s, 4, 4); ! ok {
+		if n, ok = parseInt(s, pos_s, 4, 4); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		d.setYear(n)
 		(*pos)++
 	case 'y':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n < 70 {
@@ -330,7 +329,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'a':
 		fallthrough
 	case 'A':
-		if n, ok = parseAMPM(s, pos_s); ! ok {
+		if n, ok = parseAMPM(s, pos_s); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		d.ap = n
@@ -343,7 +342,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'g':
 		fallthrough
 	case 'h':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n <= 0 || 12 < n {
@@ -358,7 +357,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	case 'G':
 		fallthrough
 	case 'H':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n <= 0 || 23 < n {
@@ -368,7 +367,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 		(*pos)++
 	// Minute
 	case 'i':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n <= 0 || 59 < n {
@@ -378,7 +377,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 		(*pos)++
 	// Seconds
 	case 's':
-		if n, ok = parseInt(s, pos_s, 1, 2); ! ok {
+		if n, ok = parseInt(s, pos_s, 1, 2); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		if n <= 0 || 59 < n {
@@ -389,7 +388,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	// Milliseconds
 	case 'v':
 		var f float64
-		if f, ok = parseDecimal(s, pos_s, 1, 6); ! ok {
+		if f, ok = parseDecimal(s, pos_s, 1, 6); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		d.setMicrosecond(int(f * 1e6))
@@ -397,14 +396,14 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 	// Microseconds
 	case 'u':
 		var f float64
-		if f, ok = parseDecimal(s, pos_s, 1, 6); ! ok {
+		if f, ok = parseDecimal(s, pos_s, 1, 6); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		d.setMicrosecond(int(f * 1e6))
 		(*pos)++
 	// Unixtime
 	case 'U':
-		if n, ok = parseInt(s, pos_s, 0, 20); ! ok {
+		if n, ok = parseInt(s, pos_s, 0, 20); !ok {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		// set Unixtime
@@ -444,11 +443,11 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 				}
 			}
 			d.setLocation(loc)
-		} 
+		}
 
 		(*pos)++
 
-	// Other formats 
+	// Other formats
 	case '!':
 		d.reset()
 	case '|':
@@ -459,7 +458,7 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 		d.flags |= SKIP_ERRORS
 		(*pos)++
 	case '#':
-		if ! isSeparator((*s)[*pos_s]) {
+		if !isSeparator((*s)[*pos_s]) {
 			return -1, errors.New(fmt.Sprintf("failed to parse format: %s", string((*format)[*pos])))
 		}
 		(*pos_s)++
@@ -469,29 +468,29 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 		(*pos)++
 	case '*':
 		next_c := -1
-		if *pos + 1 < len(*format) {
+		if *pos+1 < len(*format) {
 			next_c = int((*format)[(*pos)+1])
 		}
 
 		s_len := len(*s)
 		(*pos_s)++
-		for *pos_s < s_len && int((*s)[*pos_s]) != next_c && ! isAlphanumeric( (*s)[*pos_s] ) {
+		for *pos_s < s_len && int((*s)[*pos_s]) != next_c && !isAlphanumeric((*s)[*pos_s]) {
 			(*pos_s)++
 		}
 		(*pos)++
-	
+
 	// other same letter
 	//case (*s)[*pos_s]:
 	//	(*pos_s)++
 	//	(*pos)++
-	
+
 	// Not hit
 	default:
 		not_hit = true
 	}
-	if (not_hit) {
+	if not_hit {
 		// space
-		if (isSpace((*format)[*pos])) {
+		if isSpace((*format)[*pos]) {
 			_ = skipSpaces(format, pos)
 			_ = skipSpaces(s, pos_s)
 		} else if (*format)[*pos] == (*s)[*pos_s] {
@@ -504,7 +503,6 @@ func parseFormatChar(format *string, pos *int, s *string, pos_s *int, d *TimeDat
 
 	return (*pos_s), nil
 }
-
 
 // Parse a datetime string with a format string
 func ParseFormat(format string, s string) (*time.Time, error) {
@@ -527,8 +525,8 @@ func ParseFormat(format string, s string) (*time.Time, error) {
 
 	data := NewTimeData()
 	for pos < f_len {
-		// skip spaces 
-		if (isSpace(format[pos])) {
+		// skip spaces
+		if isSpace(format[pos]) {
 			_ = skipSpaces(&format, &pos)
 			_ = skipSpaces(&s, &pos_s)
 		}

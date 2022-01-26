@@ -10,9 +10,9 @@ import (
 )
 
 // Return a formatted string
-// 
+//
 // [Note]
-// This is a golang alternative of php `sprintf`, but 
+// This is a golang alternative of php `sprintf`, but
 // usually you can also use `fmt`, golang standard library for formatting variables.
 func Sprintf(format string, args ...interface{}) (string, error) {
 	// fmt.doPrintf

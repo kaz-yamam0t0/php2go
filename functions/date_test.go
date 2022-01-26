@@ -1,9 +1,9 @@
 package functions
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"fmt"
 )
 import "time"
 
@@ -42,12 +42,11 @@ func TestDate(t *testing.T) {
 	assert.Equal(t, "Wed, 29 Dec 2021 18:24:00 +0900", Date("r", d))
 }
 
-
 func ExampleDate() {
 	// Date(format string, baseTime int*|time.Time) returns string
 	// format -> https://www.php.net/manual/en/datetime.format.php
 
-	fmt.Println(Date("r", time.Now())) // Wed, 29 Dec 2021 18:24:00 +0900
+	fmt.Println(Date("r", time.Now()))                     // Wed, 29 Dec 2021 18:24:00 +0900
 	fmt.Println(Date("l jS \\of F Y h:i:s A", time.Now())) // Wednesday 29th of December 2021 06:24:00 PM
-	fmt.Println(Date("Y-m-d H:i:s", time.Now())) // 2021-12-29 18:24:00
+	fmt.Println(Date("Y-m-d H:i:s", time.Now()))           // 2021-12-29 18:24:00
 }

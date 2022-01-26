@@ -1,10 +1,10 @@
 package functions
 
 // Strip whitespace (or other characters) from the end of a string
-// 
+//
 // Actually the sypnosis of Rtrim() is like this:
-// 
-//  Rtrim(s string[, characters sring = " \n\r\t\v\x00"]) 
+//
+//  Rtrim(s string[, characters sring = " \n\r\t\v\x00"])
 func Rtrim(s string, args ...string) string {
 	var flags [256]byte
 

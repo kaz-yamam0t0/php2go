@@ -10,42 +10,43 @@ import (
 
 // get month table
 func getMonthTable() map[string]int {
-	return map[string]int {
-		"january": 1, 
-		"jan": 1, 
-		"february": 2,
-		"feb": 2,
-		"march" : 3,
-		"mar": 3,
-		"april":4,
-		"apr":4,
-		"may":5,
-		"june":6,
-		"jun":6,
-		"july":7,
-		"jul":7,
-		"august":8,
-		"aug":8,
-		"september":9,
-		"sep":9,
-		"octobar": 10,
-		"oct":10,
-		"november": 11,
-		"nov":11,
-		"december": 12,
-		"dec":12, 
+	return map[string]int{
+		"january":   1,
+		"jan":       1,
+		"february":  2,
+		"feb":       2,
+		"march":     3,
+		"mar":       3,
+		"april":     4,
+		"apr":       4,
+		"may":       5,
+		"june":      6,
+		"jun":       6,
+		"july":      7,
+		"jul":       7,
+		"august":    8,
+		"aug":       8,
+		"september": 9,
+		"sep":       9,
+		"octobar":   10,
+		"oct":       10,
+		"november":  11,
+		"nov":       11,
+		"december":  12,
+		"dec":       12,
 	}
 }
-// get weekday table 
+
+// get weekday table
 func getWeekdayTable() map[string]int {
-	return map[string]int {
-		"sunday": 0,
-		"monday": 1,
-		"tuesday": 2,
+	return map[string]int{
+		"sunday":    0,
+		"monday":    1,
+		"tuesday":   2,
 		"wednesday": 3,
-		"thursday": 4,
-		"friday": 5,
-		"saturday": 6,
+		"thursday":  4,
+		"friday":    5,
+		"saturday":  6,
 	}
 }
 
@@ -57,7 +58,7 @@ func isSpace(c byte) bool {
 	return c == 0 || c == 0x20 || c == '\n' || c == '\r' || c == '\t' || c == '\v'
 }
 func isSeparator(c byte) bool {
-	return c == ';' || c == ':' || c == '/' || c == '.' || c == ',' || c == '-'  || c == '(' || c == ')'
+	return c == ';' || c == ':' || c == '/' || c == '.' || c == ',' || c == '-' || c == '(' || c == ')'
 }
 func isNumeric(c byte) bool {
 	return '0' <= c && c <= '9'
@@ -104,7 +105,6 @@ func skipChars(s *string, pos_s *int, callback func(c byte) bool) int {
 // others
 // ==============================================================
 
-
 // check if ymd is correct
 func checkDate(y int, m int, d int) bool {
 	if y < 0 || (m < 1 || 12 < m) || (d < 1 || 31 < d) {
@@ -138,6 +138,7 @@ func getMonthNum(s string) int {
 	}
 	return -1
 }
+
 // starts with month name
 func startsWithMonthName(s string) (int, string) {
 	// month_name should be the lower cases of a correct month name
@@ -147,8 +148,7 @@ func startsWithMonthName(s string) (int, string) {
 		}
 	}
 	return -1, ""
-} 
-
+}
 
 // weekday name string to number
 func getWeekdayNum(s string) int {
@@ -160,6 +160,7 @@ func getWeekdayNum(s string) int {
 	}
 	return -1
 }
+
 // starts with month name
 func startsWithWeekdayName(s string) (int, string) {
 	// month_name should be the lower cases of a correct month name
@@ -172,5 +173,4 @@ func startsWithWeekdayName(s string) (int, string) {
 		}
 	}
 	return -1, ""
-} 
-
+}

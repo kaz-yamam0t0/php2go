@@ -6,7 +6,7 @@ func Urlencode(s string) string {
 	pos := 0
 	for i := 0; i < s_len; i++ {
 		c := s[i]
-		if urlShouldEscape(c) || c == '~'  {
+		if urlShouldEscape(c) || c == '~' {
 			if c == 0x20 {
 				pos++
 			} else {

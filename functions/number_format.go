@@ -3,10 +3,10 @@ package functions
 import "strconv"
 
 // Format a number with grouped thousands
-// 
+//
 // Actually the sypnosis of NumberFormat() is like this:
-// 
-//  NumberFormat(s float64[, decimals int[, decimal_separator string[, thousands_separator string]]]) 
+//
+//  NumberFormat(s float64[, decimals int[, decimal_separator string[, thousands_separator string]]])
 func NumberFormat(num float64, args ...interface{}) string {
 	var decimals int
 	var decimal_separator string

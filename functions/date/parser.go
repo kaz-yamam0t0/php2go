@@ -1,9 +1,9 @@
 package date
 
 import (
+	"errors"
 	"strings"
 	"time"
-	"errors" 
 	//"fmt"
 )
 
@@ -13,11 +13,11 @@ func preprocessScannedStr(s string) string {
 
 	head_flg := true // head of a word
 	pos := 0
-	for pos=0; pos < s_len; pos++ {
+	for pos = 0; pos < s_len; pos++ {
 		// normalize spaces
 		if isSpace(s[pos]) || s[pos] == ',' {
 			pos++
-			for pos < s_len && (isSpace(s[pos]) || s[pos] == ',' ) {
+			for pos < s_len && (isSpace(s[pos]) || s[pos] == ',') {
 				pos++
 			}
 			if pos >= s_len {
@@ -29,8 +29,8 @@ func preprocessScannedStr(s string) string {
 
 		if head_flg {
 			// ignore "the"
-			if s_len - pos > 3 && strings.ToLower(s[pos:pos+3]) == "the" {
-				if s_len - pos < 4 || isSpace(s[pos+4]) {
+			if s_len-pos > 3 && strings.ToLower(s[pos:pos+3]) == "the" {
+				if s_len-pos < 4 || isSpace(s[pos+4]) {
 					pos += 4
 				}
 			}
@@ -44,7 +44,7 @@ func preprocessScannedStr(s string) string {
 		c := s[pos]
 		if 'A' <= c && c <= 'Z' {
 			c = c - 'A' + 'a'
-		}		
+		}
 
 		dst = append(dst, c)
 
@@ -56,25 +56,25 @@ func preprocessScannedStr(s string) string {
 func scanWord(s string, pos_s int, word string, check_end bool) int {
 	s_len := len(s)
 	length := len(word)
-	if pos_s + length > s_len {
+	if pos_s+length > s_len {
 		return -1
 	}
 	for i := 0; i < length; i++ {
-		if ! cmpichr(s[pos_s + i], word[i]) {
+		if !cmpichr(s[pos_s+i], word[i]) {
 			return -1
 		}
 	}
 	if check_end {
-		if pos_s + length < s_len {
-			c := s[pos_s + length]
-			if ! isSpace(c) && ! isSeparator(c) {
+		if pos_s+length < s_len {
+			c := s[pos_s+length]
+			if !isSpace(c) && !isSeparator(c) {
 				return -1
 			}
 		}
 	}
 	return length
 }
-func scanWords(s string, pos_s int, words []string, check_end bool) (*string) {
+func scanWords(s string, pos_s int, words []string, check_end bool) *string {
 	for _, w := range words {
 		if scanWord(s, pos_s, w, check_end) > 0 {
 			return &w
@@ -95,8 +95,8 @@ func scanDayWithSuffix(s string, pos_s int) (d int, length int) {
 
 	d_ := 0
 	ok := false
-	if d_, ok = parseInt(&s, &pos, 1,2); ! ok {
-		return -1,-1
+	if d_, ok = parseInt(&s, &pos, 1, 2); !ok {
+		return -1, -1
 	}
 
 	len_ := -1
@@ -111,7 +111,6 @@ func scanDayWithSuffix(s string, pos_s int) (d int, length int) {
 	return d_, (pos - pos_s)
 }
 
-
 func scanMonth(s string, pos_s int) (m int, length int) {
 	m = -1
 	length = -1
@@ -122,12 +121,12 @@ func scanMonth(s string, pos_s int) (m int, length int) {
 
 		l := len(month_name)
 		pos := pos_s
-		for i:=0; i < l; i++ {
+		for i := 0; i < l; i++ {
 			if pos >= s_len {
 				hit = false
 				break
 			}
-			if ! cmpichr(s[pos], month_name[i]) {
+			if !cmpichr(s[pos], month_name[i]) {
 				hit = false
 				break
 			}
@@ -152,12 +151,12 @@ func scanWeekday(s string, pos_s int) (w int, length int) {
 
 		l := len(weekday_name)
 		pos := pos_s
-		for i:=0; i < l; i++ {
+		for i := 0; i < l; i++ {
 			if pos >= s_len {
 				hit = false
 				break
 			}
-			if ! cmpichr(s[pos], weekday_name[i]) {
+			if !cmpichr(s[pos], weekday_name[i]) {
 				hit = false
 				break
 			}
@@ -190,7 +189,7 @@ func scanTimezoneOffset(s string, pos_s int) (s_ int, length int) {
 	h_ := -1
 	m_ := -1
 
-	if s_len - pos < 4 {
+	if s_len-pos < 4 {
 		return -1, -1
 	}
 
@@ -203,10 +202,9 @@ func scanTimezoneOffset(s string, pos_s int) (s_ int, length int) {
 	}
 	pos++
 
-
 	// h
-	if h_, ok = parseInt(&s, &pos, 1,2); ! ok {
-		return -1,-1
+	if h_, ok = parseInt(&s, &pos, 1, 2); !ok {
+		return -1, -1
 	}
 	// :
 	if pos < s_len && s[pos] == ':' {
@@ -214,14 +212,14 @@ func scanTimezoneOffset(s string, pos_s int) (s_ int, length int) {
 	}
 
 	// m
-	if m_, ok = parseInt(&s, &pos, 2,2); ! ok {
-		return -1,-1
+	if m_, ok = parseInt(&s, &pos, 2, 2); !ok {
+		return -1, -1
 	}
 	// next character must not be a digit
 	if pos < s_len && isNumeric(s[pos]) {
-		return -1,-1
+		return -1, -1
 	}
-	return ((h_ * 60 + m_) * 60 * sign_) ,(pos - pos_s)
+	return ((h_*60 + m_) * 60 * sign_), (pos - pos_s)
 }
 func scanTime(s string, pos_s int) (h_ int, m_ int, s_ int, length int) {
 	// (\d{2})\:(\d{2})(\:(\d{2}))?( (a\.m\.|p\.m\.|am|pm))?
@@ -243,42 +241,42 @@ func scanTime(s string, pos_s int) (h_ int, m_ int, s_ int, length int) {
 	}
 
 	// h
-	if h_, ok = parseInt(&s, &pos, 1,2); ! ok {
-		return -1,-1,-1,-1
+	if h_, ok = parseInt(&s, &pos, 1, 2); !ok {
+		return -1, -1, -1, -1
 	}
 	// :
 	if pos >= s_len || s[pos] != ':' {
-		return -1,-1,-1,-1
+		return -1, -1, -1, -1
 	}
 	pos++
 	// m
-	if m_, ok = parseInt(&s, &pos, 2,2); ! ok {
-		return -1,-1,-1,-1
+	if m_, ok = parseInt(&s, &pos, 2, 2); !ok {
+		return -1, -1, -1, -1
 	}
 	// (:s)?
 	if pos < s_len || s[pos] == ':' {
 		pos++
 		tmp_ := -1
-		if tmp_, ok = parseInt(&s, &pos, 2,2); ok {
+		if tmp_, ok = parseInt(&s, &pos, 2, 2); ok {
 			s_ = tmp_
 		}
 	}
 	// next character must not be a digit
 	if pos < s_len && isNumeric(s[pos]) {
-		return -1,-1,-1,-1
+		return -1, -1, -1, -1
 	}
-	
+
 	// spaces
 	skipSpaces(&s, &pos)
 
 	if (h_ < 0 || 23 < h_) || (m_ < 0 || 59 < m_) || (59 < s_) {
-		return -1,-1,-1,-1
+		return -1, -1, -1, -1
 	}
 
 	// am / pm
 	if ap_, ok = parseAMPM(&s, &pos); ok {
 		if h_ < 1 && 12 < h_ {
-			return -1,-1,-1,-1
+			return -1, -1, -1, -1
 		}
 		if ap_ == AM {
 			if h_ == 12 {
@@ -292,7 +290,7 @@ func scanTime(s string, pos_s int) (h_ int, m_ int, s_ int, length int) {
 			}
 		}
 	}
-	return h_,m_,s_,(pos - pos_s)
+	return h_, m_, s_, (pos - pos_s)
 }
 
 func scanDmy(s string, pos_s int) (y int, m int, d int, length int) {
@@ -308,8 +306,8 @@ func scanDmy(s string, pos_s int) (y int, m int, d int, length int) {
 	len_ := -1
 
 	// day
-	if d, ok = parseInt(&s, &pos, 1,2); ! ok {
-		return -1,-1,-1,-1
+	if d, ok = parseInt(&s, &pos, 1, 2); !ok {
+		return -1, -1, -1, -1
 	}
 	// suffix
 	if len_ = scanSuffix(s, pos); len_ > 0 {
@@ -317,21 +315,20 @@ func scanDmy(s string, pos_s int) (y int, m int, d int, length int) {
 	}
 	_ = skipSpaces(&s, &pos)
 
-	// month 
+	// month
 	if m, len_ = scanMonth(s, pos); len_ <= 0 {
-		return -1, -1,-1,-1
+		return -1, -1, -1, -1
 	}
 	pos += len_
 
 	_ = skipSpaces(&s, &pos)
 
-	// year 
-	if y, ok = parseInt(&s, &pos, 4,4); ! ok {
-		return -1,-1,-1,-1
+	// year
+	if y, ok = parseInt(&s, &pos, 4, 4); !ok {
+		return -1, -1, -1, -1
 	}
-	return y,m,d,(pos - pos_s)
+	return y, m, d, (pos - pos_s)
 }
-
 
 func scanYmd(s string, pos_s int) (y int, m int, d int, length int) {
 	// (\d+)([/\-\.])(\d+)([/\-\.])(\d+)
@@ -350,60 +347,60 @@ func scanYmd(s string, pos_s int) (y int, m int, d int, length int) {
 	ok := false
 
 	// n1
-	if n1, ok = parseInt(&s, &pos, 1, 4); ! ok {
-		return -1,-1,-1,-1
+	if n1, ok = parseInt(&s, &pos, 1, 4); !ok {
+		return -1, -1, -1, -1
 	}
 	// sep
 	if pos >= s_len || (s[pos] != '-' && s[pos] != '/' && s[pos] != '.') {
-		return -1,-1,-1,-1
+		return -1, -1, -1, -1
 	}
 	sep = s[pos]
 	pos++
 
 	// n2
-	if n2, ok = parseInt(&s, &pos, 1, 4); ! ok {
-		return -1,-1,-1,-1
+	if n2, ok = parseInt(&s, &pos, 1, 4); !ok {
+		return -1, -1, -1, -1
 	}
-	
+
 	// sep
 	if pos >= s_len || s[pos] != sep {
-		return -1,-1,-1,-1
+		return -1, -1, -1, -1
 	}
 	pos++
 
 	// n3
-	if n3, ok = parseInt(&s, &pos, 1, 4); ! ok {
-		return -1,-1,-1,-1
+	if n3, ok = parseInt(&s, &pos, 1, 4); !ok {
+		return -1, -1, -1, -1
 	}
 	// next character must not be a digit
 	if pos < s_len && isNumeric(s[pos]) {
-		return -1,-1,-1,-1
+		return -1, -1, -1, -1
 	}
 
 	switch sep {
 	case '.': //  d.m.y
 		if !checkDate(n3, n2, n1) {
-			return -1,-1,-1,-1
+			return -1, -1, -1, -1
 		}
-		y,m,d = n3, n2, n1
+		y, m, d = n3, n2, n1
 	case '-': //  y-m-d d-m-y
 		if checkDate(n3, n2, n1) {
-			y,m,d = n3, n2, n1
+			y, m, d = n3, n2, n1
 		} else if checkDate(n1, n2, n3) {
-			y,m,d = n1, n2, n3
+			y, m, d = n1, n2, n3
 		} else {
-			return -1,-1,-1,-1
+			return -1, -1, -1, -1
 		}
 	case '/': // y/m/d m/d/y
 		if checkDate(n3, n1, n2) {
-			y,m,d = n3, n1, n2
+			y, m, d = n3, n1, n2
 		} else if checkDate(n1, n2, n3) {
-			y,m,d = n1, n2, n3
+			y, m, d = n1, n2, n3
 		} else {
-			return -1,-1,-1,-1
+			return -1, -1, -1, -1
 		}
 	}
-	return y,m,d,(pos - pos_s)
+	return y, m, d, (pos - pos_s)
 }
 func scanRelativePosition(s string, pos_s int) (n int, unit string, length int) {
 	// ([\+\-]?)\s*(\d+|a)\s*(year|month|day|hour|minute|second|week|millisecond|microsecond|msec|ms|µsec|µs|usec|sec|min|forth?night)s?(\s+ago)?\b
@@ -426,11 +423,11 @@ func scanRelativePosition(s string, pos_s int) (n int, unit string, length int) 
 	_ = skipSpaces(&s, &pos)
 
 	// \d+ | a
-	if s[pos] == 'a' && pos + 1 < s_len && isSpace(s[pos+1]) {
+	if s[pos] == 'a' && pos+1 < s_len && isSpace(s[pos+1]) {
 		n = 1
 		pos++
-	} else if n, ok = parseInt(&s, &pos, 1, 29); ! ok {
-		return -1,"",-1
+	} else if n, ok = parseInt(&s, &pos, 1, 29); !ok {
+		return -1, "", -1
 	}
 	n = n * sign_
 
@@ -438,13 +435,13 @@ func scanRelativePosition(s string, pos_s int) (n int, unit string, length int) 
 
 	// unit
 	units := []string{
-		"year","month","day","hour","minute","second",
-		"week","millisecond","microsecond","msec","ms",
-		"µsec","µs","usec","sec","min","fortnight","forthnight",
+		"year", "month", "day", "hour", "minute", "second",
+		"week", "millisecond", "microsecond", "msec", "ms",
+		"µsec", "µs", "usec", "sec", "min", "fortnight", "forthnight",
 	}
 	s_ := scanWords(s, pos, units, false)
 	if s_ == nil {
-		return -1,"",-1
+		return -1, "", -1
 	}
 	unit = *s_
 	pos += len(unit)
@@ -470,21 +467,21 @@ func scanPosition(s string, pos_s int) (*TimeAddition, int) {
 
 	pos := pos_s
 	len_ := 0
-	
+
 	var day_flg_ *string = nil
 	var pos_flg_ *string = nil
 	var word_ *string = nil
 	var m_ int = -1
 	var w_ int = -1
 
-	// first | last day of 
-	day_flg_ = scanWords(s, pos, []string{"first","last"}, true)
+	// first | last day of
+	day_flg_ = scanWords(s, pos, []string{"first", "last"}, true)
 	if day_flg_ != nil {
 		pos += len(*day_flg_)
-		
+
 		_ = skipSpaces(&s, &pos)
-		
-		// day of 
+
+		// day of
 		len_ = scanWord(s, pos, "day", true)
 		if len_ < 0 {
 			if *day_flg_ == "last" {
@@ -493,30 +490,30 @@ func scanPosition(s string, pos_s int) (*TimeAddition, int) {
 				day_flg_ = nil
 				goto day_pos
 			}
-			return nil,-1
+			return nil, -1
 		}
 		pos += len_
 		_ = skipSpaces(&s, &pos)
-	
+
 		len_ = scanWord(s, pos, "of", true)
 		if len_ < 0 {
-			return nil,-1
+			return nil, -1
 		}
 		pos += len_
 		_ = skipSpaces(&s, &pos)
 	}
-day_pos:	
+day_pos:
 	// next | last
-	pos_flg_ = scanWords(s, pos, []string{"next","last"}, true)
+	pos_flg_ = scanWords(s, pos, []string{"next", "last"}, true)
 	if pos_flg_ == nil {
-		return nil,-1
+		return nil, -1
 	}
 	pos += len(*pos_flg_)
 	_ = skipSpaces(&s, &pos)
 
 	// year | month | day | $month_names | $weekday_names
-	if word_ = scanWords(s, pos, []string{"year", "month","day"}, true); word_ != nil {
-		pos += len(*word_)	
+	if word_ = scanWords(s, pos, []string{"year", "month", "day"}, true); word_ != nil {
+		pos += len(*word_)
 	} else if m_, len_ = scanMonth(s, pos); len_ >= 0 {
 		pos += len_
 	} else if w_, len_ = scanWeekday(s, pos); len_ >= 0 {
@@ -524,7 +521,7 @@ day_pos:
 	} else {
 		return nil, -1
 	}
-	
+
 	// new time addition
 	a := NewTimeAddition(0, "")
 	if day_flg_ != nil {
@@ -543,7 +540,7 @@ day_pos:
 }
 func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 	// P1Y2M3DT4H5M6.7S
-	a := make([]*TimeAddition,0,7)
+	a := make([]*TimeAddition, 0, 7)
 
 	s_len := len(s)
 	pos := pos_s
@@ -558,7 +555,7 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 
 	for pos < s_len && ('0' <= s[pos] && s[pos] <= '9') {
 		pos_ := pos
-		if n, ok = parseInt(&s, &pos, 1, 29); ! ok {
+		if n, ok = parseInt(&s, &pos, 1, 29); !ok {
 			break
 		}
 		if pos >= s_len {
@@ -591,7 +588,7 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 
 	for pos < s_len && ('0' <= s[pos] && s[pos] <= '9') {
 		pos_ := pos
-		if n, ok = parseInt(&s, &pos, 1, 29); ! ok {
+		if n, ok = parseInt(&s, &pos, 1, 29); !ok {
 			break
 		}
 		if pos >= s_len {
@@ -604,7 +601,7 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 		// decimal
 		var d float64 = 0.0
 		if c == '.' {
-			if d, ok = parseDecimal(&s, &pos, 1, 9); ! ok {
+			if d, ok = parseDecimal(&s, &pos, 1, 9); !ok {
 				return nil, -1
 			}
 			c = s[pos]
@@ -619,7 +616,7 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 		case 's':
 			a = append(a, NewTimeAddition(n, "second"))
 			if d > 0 {
-				a = append(a, NewTimeAddition(int(d * 1e6), "microsecond"))
+				a = append(a, NewTimeAddition(int(d*1e6), "microsecond"))
 			}
 		default:
 			break
@@ -628,7 +625,6 @@ func scanISOInterval(s string, pos_s int) ([]*TimeAddition, int) {
 
 	return a, (pos - pos_s)
 }
-
 
 // scan format chunk and add pos
 func scanFormat(data *TimeData, s string, pos int) int {
@@ -653,63 +649,63 @@ func scanFormat(data *TimeData, s string, pos int) int {
 		data.setNow()
 		pos += len_
 	} else if len_ := scanWord(s, pos, "yesterday", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(-1, "day", 0,0,0,0))
+		data.appendAddition(NewTimeAdditionWithTime(-1, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if len_ := scanWord(s, pos, "midnight", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0,0,0,0))
+		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if len_ := scanWord(s, pos, "today", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0,0,0,0))
+		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
 		pos += len_
 	} else if len_ := scanWord(s, pos, "noon", true); len_ > 0 {
-		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0,0,0,0))
+		data.appendAddition(NewTimeAdditionWithTime(0, "day", 0, 0, 0, 0))
 		pos += len_
-	// month name
 	} else if m_, len_ := scanMonth(s, pos); len_ >= 0 {
+		// month name
 		data.setMonth(m_)
 		pos += len_
-	// weekday name
 	} else if _, len_ := scanWeekday(s, pos); len_ >= 0 {
+		// weekday name
 		//data.setWeekday(num_)
 		pos += len_
-	// relative format (1 year .. etc)
 	} else if n_, unit_, len_ := scanRelativePosition(s, pos); len_ >= 0 {
+		// relative format (1 year .. etc)
 		data.appendAddition(NewTimeAddition(n_, unit_))
 		pos += len_
-	// iso8601 interval format (P1Y2M3DT1H2M3S)
 	} else if a_, len_ := scanISOInterval(s, pos); len_ >= 0 {
+		// iso8601 interval format (P1Y2M3DT1H2M3S)
 		for _, _a := range a_ {
 			data.appendAddition(_a)
 		}
 		pos += len_
-	// last|next day of the last month
 	} else if _a, len_ := scanPosition(s, pos); len_ >= 0 {
+		// last|next day of the last month
 		data.appendAddition(_a)
 		pos += len_
-	// 10th January 2021
 	} else if y_, m_, d_, len_ := scanDmy(s, pos); len_ > 0 {
+		// 10th January 2021
 		data.setYear(y_)
 		data.setMonth(m_)
 		data.setDay(d_)
 		pos += len_
-	// 10th
 	} else if d_, len_ := scanDayWithSuffix(s, pos); len_ > 0 {
+		// 10th
 		data.setDay(d_)
 		pos += len_
-	// Y-m-d d.m.Y etc
 	} else if y_, m_, d_, len_ := scanYmd(s, pos); len_ > 0 {
+		// Y-m-d d.m.Y etc
 		data.setYear(y_)
 		data.setMonth(m_)
 		data.setDay(d_)
 		pos += len_
-	// 00:00(:00)? (am|pm)?
 	} else if h_, m_, s_, len_ := scanTime(s, pos); len_ > 0 {
+		// 00:00(:00)? (am|pm)?
 		data.setHour(h_)
 		data.setMinute(m_)
 		data.setSecond(s_)
-		pos += len_	
-	// +00:00
+		pos += len_
 	} else if s_, len_ := scanTimezoneOffset(s, pos); len_ > 0 {
+		// +00:00
 		loc, err_ := time.LoadLocation("UTC")
 		if err_ != nil {
 			return -1
@@ -717,8 +713,8 @@ func scanFormat(data *TimeData, s string, pos int) int {
 		data.setLocation(loc)
 		data.setTimezoneOffset(s_)
 		pos += len_
-	// Year
-	} else if y_, ok := parseInt(&s, &pos, 4,4); ok { // pos has been already increased 
+	} else if y_, ok := parseInt(&s, &pos, 4, 4); ok { // pos has been already increased
+		// Year
 		data.setYear(y_)
 	} else {
 		return -1

@@ -3,10 +3,10 @@ package functions
 import "errors"
 
 // Find the first occurrence of a string
-// 
+//
 // Actually the sypnosis of Strstr() is like this:
-// 
-//  Strstr(haystack string, needle string[, before_needle bool = false]) 
+//
+//  Strstr(haystack string, needle string[, before_needle bool = false])
 func Strstr(s string, needle string, args ...bool) (string, error) {
 	before_needle := false
 	if len(args) > 0 {

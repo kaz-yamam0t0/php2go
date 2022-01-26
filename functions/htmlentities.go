@@ -6,10 +6,10 @@ import (
 )
 
 // Convert all applicable characters to HTML entities
-// 
+//
 // Actually the sypnosis of Htmlentities() is like this:
-// 
-//  Htmlentities(s string[, flags int[, encoding string[, double_encode bool]]]) 
+//
+//  Htmlentities(s string[, flags int[, encoding string[, double_encode bool]]])
 func Htmlentities(s string, args ...interface{}) string {
 	var flags int = ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML401
 	var encoding string

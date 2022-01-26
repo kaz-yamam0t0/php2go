@@ -5,10 +5,10 @@ import (
 )
 
 // Case-insensitive strstr
-// 
+//
 // Actually the sypnosis of Stristr() is like this:
-// 
-//  Stristr(s string, needle string[, before_needle bool = 0]) 
+//
+//  Stristr(s string, needle string[, before_needle bool = 0])
 func Stristr(s string, needle string, args ...bool) (string, error) {
 	before_needle := false
 	if len(args) > 0 {

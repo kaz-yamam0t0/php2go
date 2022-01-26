@@ -1,24 +1,25 @@
 package functions
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"fmt"
 )
+
 // import "time"
 
 func TestDateCreateFromFormat(t *testing.T) {
 	cases := []string{
-		" l jS \\of F Y  h:i:s A", 
+		" l jS \\of F Y  h:i:s A",
 		"Wednesday 29th of December  2021 06:24:12 PM ",
 
-		"  Y-m-d    H:i:s ", 
+		"  Y-m-d    H:i:s ",
 		" 2021-12-29  18:24:12  ",
 
-		"Y#n#j H:i:s", 
+		"Y#n#j H:i:s",
 		"2021,12,29 18:24:12",
 
-		"U H?i#s", 
+		"U H?i#s",
 		"1640769840 18_24:12",
 	}
 	l := len(cases)
@@ -35,10 +36,10 @@ func TestDateCreateFromFormat(t *testing.T) {
 	}
 
 	cases = []string{
-		"Y?n*j|", 
+		"Y?n*j|",
 		"2021a12___29 18:24:12",
 
-		"Y#n#j|+j", 
+		"Y#n#j|+j",
 		"2021/12/29 ___",
 	}
 	l = len(cases)
@@ -60,7 +61,7 @@ func TestDateCreateFromFormat(t *testing.T) {
 		"GMT",
 		"MST",
 		//"JST", // "Asia/Tokyo",
-		
+
 		"Africa/Johannesburg",
 		"Africa/Lagos",
 		"Africa/Windhoek",
@@ -130,7 +131,7 @@ func TestDateCreateFromFormat(t *testing.T) {
 	}
 	l = len(cases)
 	for i := 0; i < l; i++ {
-		tm, err := DateCreateFromFormat("  Y-m-d    H:i:s T", " 2021-12-29  18:24:12 " + cases[i])
+		tm, err := DateCreateFromFormat("  Y-m-d    H:i:s T", " 2021-12-29  18:24:12 "+cases[i])
 
 		assert.Nil(t, err)
 		assert.Equal(t, 2021, tm.Year())
@@ -149,7 +150,7 @@ func TestDateCreateFromFormat(t *testing.T) {
 		-1,
 		-11,
 		+1,
-		+11, 
+		+11,
 	}
 	l = len(cases_i)
 	for i := 0; i < l; i++ {
@@ -160,7 +161,7 @@ func TestDateCreateFromFormat(t *testing.T) {
 		assert.Equal(t, 2021, tm.Year())
 		assert.Equal(t, 12, int(tm.Month()))
 		assert.Equal(t, 29, tm.Day())
-		assert.Equal(t, 12 + n_, tm.Hour())
+		assert.Equal(t, 12+n_, tm.Hour())
 		assert.Equal(t, 24, tm.Minute())
 		assert.Equal(t, 12, tm.Second())
 

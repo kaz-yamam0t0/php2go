@@ -13,10 +13,10 @@ func isSpace(c byte) bool {
 }
 
 // Wraps a string to a given number of characters
-// 
+//
 // Actually the sypnosis of Wordwrap() is like this:
-// 
-//  Wordwrap(s string[, width int = 75[, break string = "\n", [ cut_long_words bool = false ]]]) 
+//
+//  Wordwrap(s string[, width int = 75[, break string = "\n", [ cut_long_words bool = false ]]])
 func Wordwrap(s string, args ...interface{}) (string, error) {
 	var width int = 75
 	var break_s string = "\n"

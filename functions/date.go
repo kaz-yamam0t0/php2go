@@ -2,14 +2,14 @@ package functions
 
 import (
 	//"strconv"
-	"time"
 	php2go_date "github.com/kaz-yamam0t0/php2go/functions/date"
+	"time"
 )
 
 // Format a local time/date
-// 
+//
 // Actually the sypnosis of Date() is like this:
-// 
+//
 //  Date(s string, baseTime int*|time.Time)
 func Date(s string, args ...interface{}) string {
 	var dt time.Time

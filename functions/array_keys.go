@@ -5,6 +5,7 @@ import (
 	//"bytes"
 	"reflect"
 )
+
 // phpEqual
 func phpEqual(a interface{}, b interface{}, strict_flg bool) bool {
 	if strict_flg == false {
@@ -14,9 +15,9 @@ func phpEqual(a interface{}, b interface{}, strict_flg bool) bool {
 }
 
 // Return all the keys or a subset of the keys of an array.
-// 
+//
 // Actually ArrayKeys is called like this:
-// 
+//
 //  ArrayKeys(array interface{} , search_value interface{} [, string_flg bool]) []interface{}
 func ArrayKeys(args ...interface{}) ([]interface{}, error) {
 	//var values []interface{}

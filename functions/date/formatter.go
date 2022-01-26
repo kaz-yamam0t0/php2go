@@ -203,11 +203,10 @@ func dateFormatChar(f byte, d time.Time) (string, bool) {
 	return "", false
 }
 
-
 // Format a local time/date
-// 
+//
 // Actually the sypnosis of Date() is like this:
-// 
+//
 //  Date(s string, baseTime int*|time.Time)
 func DateFormat(s string, dt time.Time) string {
 	var dst []byte
