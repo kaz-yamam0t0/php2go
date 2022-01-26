@@ -108,58 +108,50 @@ func getLastDay(y int, m int) int {
 }
 
 // month name string to number
-func getMonthNum(month_name string) int {
+func getMonthNum(s string) int {
 	// month_name should be the lower cases of a correct month name
-	switch {
-	case month_name == "january" || month_name == "jan":
-		return 1
-	case month_name == "february" || month_name == "feb":
-		return 2
-	case month_name == "march" || month_name == "mar":
-		return 3
-	case month_name == "april" || month_name == "apr":
-		return 4
-	case month_name == "may":
-		return 5
-	case month_name == "june" || month_name == "jun":
-		return 6
-	case month_name == "july" || month_name == "jul":
-		return 7
-	case month_name == "august" || month_name == "aug":
-		return 8
-	case month_name == "september" || month_name == "sep":
-		return 9
-	case month_name == "october" || month_name == "oct":
-		return 10
-	case month_name == "november" || month_name == "nov":
-		return 11
-	case month_name == "december" || month_name == "dec":
-		return 12
+	for month_name, month_num := range getMonthTable() {
+		if s == month_name {
+			return month_num
+		}
 	}
 	return -1
 }
+// starts with month name
+func startsWithMonthName(s string) (int, string) {
+	// month_name should be the lower cases of a correct month name
+	for month_name, month_num := range getMonthTable() {
+		if strings.HasPrefix(s, month_name) {
+			return month_num, month_name
+		}
+	}
+	return -1, ""
+} 
+
 
 // weekday name string to number
-func getWeekdayNum(day_name string) int {
+func getWeekdayNum(s string) int {
 	// day_name should be the lower cases of a correct day name
-	switch {
-	case day_name == "sunday" || day_name == "sun":
-		return 0
-	case day_name == "monday" || day_name == "mon":
-		return 1
-	case day_name == "tuesday" || day_name == "tue":
-		return 2
-	case day_name == "wednesday" || day_name == "wed":
-		return 3
-	case day_name == "thursday" || day_name == "thu":
-		return 4
-	case day_name == "friday" || day_name == "fri":
-		return 5
-	case day_name == "saturday" || day_name == "sat":
-		return 6
+	for weekday_name, weekday_num := range getWeekdayTable() {
+		if s == weekday_name {
+			return weekday_num
+		}
 	}
 	return -1
 }
+// starts with month name
+func startsWithWeekdayName(s string) (int, string) {
+	// month_name should be the lower cases of a correct month name
+	flg3 := len(s) > 3
+	for weekday_name, weekday_num := range getWeekdayTable() {
+		if strings.HasPrefix(s, weekday_name) || (flg3 && s[:3] == weekday_name[:3]) {
+			return weekday_num, weekday_name
+		}
+	}
+	return -1, ""
+} 
+
+
 
 // scan format chunk and add pos
 func scanFormat(data *TimeData, s string, pos int) int {
@@ -342,6 +334,12 @@ func scanFormat(data *TimeData, s string, pos int) int {
 		if _sign == "-" {
 			data.z = data.z * -1
 		}
+		// set UTC
+		loc, err_ := time.LoadLocation("UTC")
+		if err_ != nil {
+			return -1
+		}
+		data.setLocation(loc)
 	} else {
 		return -1
 	}
@@ -427,69 +425,13 @@ func add(data *TimeData, a *TimeAddition) {
 	default:
 		panic("unsupported units")
 	}
-	normalize(data)
-}
-func normalize(data *TimeData) {
-	data.s, data.us = norm(data.s, data.us, 1000000)
-	data.i, data.s = norm(data.i, data.s, 60)
-	data.h, data.i = norm(data.h, data.i, 60)
-	data.d, data.h = norm(data.d, data.h, 24)
-
-	// day, month, year
-	normalizeYmd(data)
-}
-
-func normalizeYmd(data *TimeData) {
-	// year, month
-	m := data.m - 1
-	data.y, m = norm(data.y, m, 12)
-	data.m = m + 1
-
-	// days
-	for data.d <= 0 {
-		// last month
-		data.m--
-		if data.m <= 0 {
-			data.m = 12
-			data.y--
-		}
-		// days of the last month
-		data.d += getLastDay(data.y, data.m)
-	}
-
-	last_d := getLastDay(data.y, data.m)
-	for data.d > last_d {
-		data.m++
-		if data.m > 12 {
-			data.m = 1
-			data.y++
-		}
-		data.d -= last_d
-
-		last_d = getLastDay(data.y, data.m)
-	}
-}
-
-// copied from time/time.go
-// @see https://cs.opensource.google/go/go/+/refs/tags/go1.17.5:src/time/time.go;l=1352;drc=refs%2Ftags%2Fgo1.17.5
-func norm(hi, lo, base int) (nhi, nlo int) {
-	if lo < 0 {
-		n := (-lo-1)/base + 1
-		hi -= n
-		lo += n * base
-	}
-	if lo >= base {
-		n := lo / base
-		hi += n
-		lo -= n * base
-	}
-	return hi, lo
+	data.normalize()
 }
 
 // Parse string to a time.Time variable
 //func ParseTimeFormat(format string, base *time.Time) (*time.Time, *TimeData) {
 func ParseTimeFormat(format string, base *time.Time) (*time.Time, int64) {
-	s := strings.TrimSpace(strings.ToLower(format + " "))
+	s := strings.TrimSpace(strings.ToLower(format))
 	if s == "" {
 		return nil, -1
 	}
@@ -498,22 +440,13 @@ func ParseTimeFormat(format string, base *time.Time) (*time.Time, int64) {
 	//defer freeRegexp()
 
 	// data
-	data := TimeData{-1, -1, -1, 0, 0, 0, 0, 0, 0, []TimeAddition{}}
+	data := NewTimeData()
 
 	if base == nil {
 		t_ := time.Now()
 		base = &t_
 	}
-
-	data.y = base.Year()
-	data.m = int(base.Month())
-	data.d = base.Day()
-	data.h = base.Hour()
-	data.i = base.Minute()
-	data.s = base.Second()
-	data.us = int(base.Nanosecond() / 1e3)
-
-	_, data.z = base.Zone()
+	data.setFromTime(base)
 
 	// convert datetime
 	s = p_ignore.ReplaceAllString(s, ` `)
@@ -525,30 +458,31 @@ func ParseTimeFormat(format string, base *time.Time) (*time.Time, int64) {
 	pos := 0
 	cnts := 0
 	for cnts < 15 && pos < s_len {
-		pos = scanFormat(&data, s, pos)
+		pos = scanFormat(data, s, pos)
 		if pos < 0 {
 			return nil, -1
 		}
 		cnts++
 	}
-	//fmt.Print("[data]",data,"\n")
 
 	// additions
 	a_len := len(data.additions)
 	for i := 0; i < a_len; i++ {
-		move(&data, &data.additions[i])
+		move(data, &data.additions[i])
 	}
 	//fmt.Print("[data] -> ",data,"\n")
 
 	// result
-	res := time.Date(data.y, time.Month(data.m), data.d, data.h, data.i, data.s, data.us*1e3, time.Local)
+	// res := time.Date(data.y, time.Month(data.m), data.d, data.h, data.i, data.s, data.us*1e3, time.Local)
+	res := data.Time()
 
 	// convert to unix time
+	//t := res.Unix()
+	//_, offset := res.Zone()
+	//t += int64(offset)
+	//t -= int64(data.z)
 	t := res.Unix()
-	_, offset := res.Zone()
-	t += int64(offset)
-	t -= int64(data.z)
 
 	// return &res, &data
-	return &res, t
+	return res, t
 }
