@@ -2,7 +2,7 @@ package functions
 
 import (
 	//"strconv"
-	php2go_date "github.com/kaz-yamam0t0/php2go/functions/date"
+	"github.com/kaz-yamam0t0/go-timeparser/timeparser"
 	"time"
 )
 
@@ -36,5 +36,5 @@ func Date(s string, args ...interface{}) string {
 		dt = time.Now()
 	}
 
-	return php2go_date.DateFormat(s, dt)
+	return timeparser.FormatTime(s, &dt)
 }

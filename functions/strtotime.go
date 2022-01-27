@@ -1,12 +1,12 @@
 package functions
 
 import (
-	php2go_date "github.com/kaz-yamam0t0/php2go/functions/date"
+	"github.com/kaz-yamam0t0/go-timeparser/timeparser"
 	"time"
 )
 
 func Str2Time(format string, base *time.Time) (*time.Time, error) {
-	return php2go_date.ParseTimeFormat(format, base)
+	return timeparser.ParseTimeStr(format, base)
 }
 
 // Parse about any English textual datetime description into a Unix timestamp
@@ -34,7 +34,7 @@ func Strtotime(format string, args ...interface{}) int64 {
 		t_ := time.Now()
 		base = time.Date(t_.Year(), t_.Month(), t_.Day(), 0, 0, 0, 0, t_.Location())
 	}
-	res, err := php2go_date.ParseTimeFormat(format, &base)
+	res, err := timeparser.ParseTimeStr(format, &base)
 	if err != nil {
 		return -1
 	}
